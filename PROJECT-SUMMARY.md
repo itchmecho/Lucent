@@ -5,7 +5,7 @@
 A complete multi-platform SwiftUI application structure for Lucent with all source files, tests, and configuration ready to use.
 
 ### Project Location
-`/Users/sam/Documents/github/PhotoKeepSafe` (will be renamed to Lucent)
+`/Users/sam/Documents/Github/Lucent`
 
 ### Directory Structure
 
@@ -125,13 +125,13 @@ Choose one of these methods:
 brew install xcodegen
 
 # Generate project
-cd /Users/sam/Documents/github/PhotoKeepSafe
+cd /Users/sam/Documents/Github/Lucent
 ./generate-project.sh
 ```
 
 Or manually:
 ```bash
-cd /Users/sam/Documents/github/PhotoKeepSafe
+cd /Users/sam/Documents/Github/Lucent
 xcodegen generate
 ```
 
@@ -264,7 +264,7 @@ If you encounter issues:
 
 ```bash
 # Navigate to project
-cd /Users/sam/Documents/github/PhotoKeepSafe
+cd /Users/sam/Documents/Github/Lucent
 
 # Generate Xcode project (requires xcodegen)
 xcodegen generate

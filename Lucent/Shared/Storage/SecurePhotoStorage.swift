@@ -121,20 +121,20 @@ actor SecurePhotoStorage {
 
         do {
             // Encrypt data before writing
-            let encryptedData = await encryptData(data)
+            let encryptedData = try encryptData(data)
 
             // Save encrypted photo file
             let photoFileURL = encryptedPhotosURL.appendingPathComponent("\(photoId.uuidString).enc")
             try encryptedData.write(to: photoFileURL)
 
-            // Generate and save thumbnail
+            // Generate and save thumbnail (optional - won't fail import if it fails)
             let thumbnailURL = try await generateAndSaveThumbnail(from: data, photoId: photoId)
 
             // Create EncryptedPhoto object
             let photo = EncryptedPhoto(
                 id: photoId,
                 encryptedFileURL: photoFileURL,
-                thumbnailURL: thumbnailURL,
+                thumbnailURL: thumbnailURL,  // May be nil if thumbnail generation failed
                 metadata: metadata,
                 dateAdded: Date()
             )
@@ -167,7 +167,7 @@ actor SecurePhotoStorage {
             let encryptedData = try Data(contentsOf: photo.encryptedFileURL)
 
             // Decrypt data before returning
-            let decryptedData = await decryptData(encryptedData)
+            let decryptedData = try decryptData(encryptedData)
 
             return decryptedData
         } catch {
@@ -278,21 +278,28 @@ actor SecurePhotoStorage {
     }
 
     /// Generates and saves a thumbnail for a photo
-    private func generateAndSaveThumbnail(from imageData: Data, photoId: UUID) async throws -> URL {
-        // Generate thumbnail
-        let thumbnailData = try await ThumbnailManager.shared.generateThumbnail(from: imageData)
+    /// Note: If thumbnail generation fails, photo is still saved without thumbnail
+    private func generateAndSaveThumbnail(from imageData: Data, photoId: UUID) async throws -> URL? {
+        do {
+            // Generate thumbnail - failures here won't block photo import
+            let thumbnailData = try await ThumbnailManager.shared.generateThumbnail(from: imageData)
 
-        // Encrypt thumbnail data before writing
-        let encryptedThumbnailData = await encryptData(thumbnailData)
+            // Encrypt thumbnail data before writing
+            let encryptedThumbnailData = try encryptData(thumbnailData)
 
-        // Save thumbnail
-        let thumbnailFileURL = thumbnailsURL.appendingPathComponent("\(photoId.uuidString)_thumb.enc")
-        try encryptedThumbnailData.write(to: thumbnailFileURL)
+            // Save thumbnail
+            let thumbnailFileURL = thumbnailsURL.appendingPathComponent("\(photoId.uuidString)_thumb.enc")
+            try encryptedThumbnailData.write(to: thumbnailFileURL)
 
-        // Cache thumbnail
-        await ThumbnailManager.shared.cacheThumbnail(thumbnailData, for: photoId)
+            // Cache thumbnail
+            await ThumbnailManager.shared.cacheThumbnail(thumbnailData, for: photoId)
 
-        return thumbnailFileURL
+            return thumbnailFileURL
+        } catch {
+            // Log thumbnail error but don't fail the entire import
+            print("⚠️ Thumbnail generation failed for \(photoId): \(error.localizedDescription)")
+            return nil
+        }
     }
 
     /// Loads the photo index from disk
@@ -354,28 +361,16 @@ extension SecurePhotoStorage {
     /// Encrypts data using EncryptionManager
     /// - Parameter data: Data to encrypt
     /// - Returns: Encrypted data
-    private func encryptData(_ data: Data) async -> Data {
-        do {
-            return try EncryptionManager.shared.encrypt(data: data)
-        } catch {
-            // Log error but return original data as fallback
-            // In production, this should throw an error instead
-            print("⚠️ Encryption failed: \(error.localizedDescription)")
-            return data
-        }
+    /// - Throws: Error if encryption fails
+    private func encryptData(_ data: Data) throws -> Data {
+        return try EncryptionManager.shared.encrypt(data: data)
     }
 
     /// Decrypts data using EncryptionManager
     /// - Parameter data: Encrypted data
     /// - Returns: Decrypted data
-    private func decryptData(_ data: Data) async -> Data {
-        do {
-            return try EncryptionManager.shared.decrypt(data: data)
-        } catch {
-            // Log error but return original data as fallback
-            // In production, this should throw an error instead
-            print("⚠️ Decryption failed: \(error.localizedDescription)")
-            return data
-        }
+    /// - Throws: Error if decryption fails
+    private func decryptData(_ data: Data) throws -> Data {
+        return try EncryptionManager.shared.decrypt(data: data)
     }
 }

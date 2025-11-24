@@ -3,7 +3,7 @@
 ## Current Status
 
 All project files are created and ready at:
-`/Users/sam/Documents/github/PhotoKeepSafe` (will be renamed to Lucent)
+`/Users/sam/Documents/Github/Lucent`
 
 The only missing piece is the `.xcodeproj` file, which needs to be generated.
 
@@ -18,7 +18,7 @@ Install xcodegen and let it generate the project automatically:
 brew install xcodegen
 
 # Navigate to project
-cd /Users/sam/Documents/github/PhotoKeepSafe
+cd /Users/sam/Documents/Github/Lucent
 
 # Generate Xcode project
 xcodegen generate
@@ -94,7 +94,7 @@ Lucent/
 
 ```bash
 # Navigate to project
-cd /Users/sam/Documents/github/PhotoKeepSafe
+cd /Users/sam/Documents/Github/Lucent
 
 # Generate project (requires xcodegen)
 ./generate-project.sh

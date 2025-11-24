@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# PhotoKeepSafe - Project Generation Script
+# Lucent - Project Generation Script
 # This script helps you create the Xcode project
 
 set -e
 
-echo "PhotoKeepSafe - Project Setup"
+echo "Lucent - Project Setup"
 echo "=============================="
 echo ""
 
@@ -19,7 +19,7 @@ if command -v xcodegen &> /dev/null; then
     echo "✓ Project generated successfully!"
     echo ""
     echo "You can now:"
-    echo "  1. Open PhotoKeepSafe.xcodeproj in Xcode"
+    echo "  1. Open Lucent.xcodeproj in Xcode"
     echo "  2. Select a scheme (iOS or macOS)"
     echo "  3. Build and run (Cmd+R)"
     echo ""

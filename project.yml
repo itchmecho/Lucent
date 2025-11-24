@@ -1,7 +1,7 @@
 name: Lucent
 
 options:
-  bundleIdPrefix: com.lucent
+  bundleIdPrefix: com.lucentvault
   deploymentTarget:
     iOS: "18.0"
     macOS: "15.0"
@@ -24,7 +24,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: Lucent
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.app
         TARGETED_DEVICE_FAMILY: "1,2"
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
         GENERATE_INFOPLIST_FILE: YES
@@ -33,6 +33,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"
         INFOPLIST_KEY_NSFaceIDUsageDescription: "Lucent uses Face ID to securely protect your photos and prevent unauthorized access."
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Lucent needs access to your photo library to import photos into your secure vault."
+        INFOPLIST_KEY_NSCameraUsageDescription: "Lucent needs access to your camera to capture photos directly into your secure vault."
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ENABLE_PREVIEWS: YES
@@ -46,7 +48,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: Lucent
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.app
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         GENERATE_INFOPLIST_FILE: YES
         ENABLE_HARDENED_RUNTIME: YES
@@ -65,7 +67,7 @@ targets:
       - target: Lucent (iOS)
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.LucentTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.LucentTests
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
         TARGETED_DEVICE_FAMILY: "1,2"
 
@@ -78,7 +80,7 @@ targets:
       - target: Lucent (macOS)
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.LucentTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.LucentTests
         MACOSX_DEPLOYMENT_TARGET: "15.0"
 
   LucentUITests (iOS):
@@ -90,7 +92,7 @@ targets:
       - target: Lucent (iOS)
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.LucentUITests
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.LucentUITests
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
         TARGETED_DEVICE_FAMILY: "1,2"
         TEST_TARGET_NAME: "Lucent (iOS)"
@@ -104,7 +106,7 @@ targets:
       - target: Lucent (macOS)
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.lucent.LucentUITests
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucentvault.LucentUITests
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         TEST_TARGET_NAME: "Lucent (macOS)"
 
