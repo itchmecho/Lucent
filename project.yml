@@ -1,0 +1,141 @@
+name: PhotoKeepSafe
+
+options:
+  bundleIdPrefix: com.photokeepsafe
+  deploymentTarget:
+    iOS: "18.0"
+    macOS: "15.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+targets:
+  PhotoKeepSafe (iOS):
+    type: application
+    platform: iOS
+    sources:
+      - path: PhotoKeepSafe/Shared
+      - path: PhotoKeepSafe/iOS
+    settings:
+      base:
+        PRODUCT_NAME: PhotoKeepSafe
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.app
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_PREVIEWS: YES
+
+  PhotoKeepSafe (macOS):
+    type: application
+    platform: macOS
+    sources:
+      - path: PhotoKeepSafe/Shared
+      - path: PhotoKeepSafe/macOS
+    settings:
+      base:
+        PRODUCT_NAME: PhotoKeepSafe
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.app
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        GENERATE_INFOPLIST_FILE: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        CODE_SIGN_ENTITLEMENTS: PhotoKeepSafe/macOS/PhotoKeepSafe.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_PREVIEWS: YES
+
+  PhotoKeepSafeTests (iOS):
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - PhotoKeepSafeTests
+    dependencies:
+      - target: PhotoKeepSafe (iOS)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.PhotoKeepSafeTests
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  PhotoKeepSafeTests (macOS):
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - PhotoKeepSafeTests
+    dependencies:
+      - target: PhotoKeepSafe (macOS)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.PhotoKeepSafeTests
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+
+  PhotoKeepSafeUITests (iOS):
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - PhotoKeepSafeUITests
+    dependencies:
+      - target: PhotoKeepSafe (iOS)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.PhotoKeepSafeUITests
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        TEST_TARGET_NAME: "PhotoKeepSafe (iOS)"
+
+  PhotoKeepSafeUITests (macOS):
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - PhotoKeepSafeUITests
+    dependencies:
+      - target: PhotoKeepSafe (macOS)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.PhotoKeepSafeUITests
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        TEST_TARGET_NAME: "PhotoKeepSafe (macOS)"
+
+schemes:
+  PhotoKeepSafe (iOS):
+    build:
+      targets:
+        PhotoKeepSafe (iOS): all
+        PhotoKeepSafeTests (iOS): [test]
+        PhotoKeepSafeUITests (iOS): [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PhotoKeepSafeTests (iOS)
+        - PhotoKeepSafeUITests (iOS)
+    archive:
+      config: Release
+
+  PhotoKeepSafe (macOS):
+    build:
+      targets:
+        PhotoKeepSafe (macOS): all
+        PhotoKeepSafeTests (macOS): [test]
+        PhotoKeepSafeUITests (macOS): [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PhotoKeepSafeTests (macOS)
+        - PhotoKeepSafeUITests (macOS)
+    archive:
+      config: Release
