@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os.log
 
 #if canImport(UIKit)
 import UIKit
@@ -82,7 +83,7 @@ actor SecureImageLoader {
 
                 return image
             } catch {
-                print("Failed to load image: \(error.localizedDescription)")
+                AppLogger.storage.error("Failed to load image: \(error.localizedDescription, privacy: .public)")
                 return nil
             }
         }

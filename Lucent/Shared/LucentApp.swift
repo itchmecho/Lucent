@@ -11,14 +11,10 @@ struct LucentApp: App {
                 ContentView()
 
                 // Authentication overlay when app is locked
-                // TODO: Re-enable authentication after adding setup flow
-                // Temporarily disabled for testing
-                /*
                 if !appLockManager.isAuthenticated && appLockManager.isAppLockEnabled {
                     AuthenticationView(appLockManager: appLockManager)
                         .transition(.opacity)
                 }
-                */
             }
             .animation(.easeInOut, value: appLockManager.isAuthenticated)
         }

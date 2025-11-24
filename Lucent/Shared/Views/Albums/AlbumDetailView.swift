@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 
 /// View displaying photos in an album with grid layout and sorting options
 struct AlbumDetailView: View {
@@ -221,7 +222,7 @@ struct PhotoThumbnailView: View {
             }
         } catch {
             // Silently fail - thumbnail will show placeholder
-            print("Failed to load thumbnail for \(photo.id): \(error.localizedDescription)")
+            AppLogger.storage.error("Failed to load thumbnail for \(photo.id, privacy: .public): \(error.localizedDescription, privacy: .public)")
         }
     }
 }

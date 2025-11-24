@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 
 /// Full-screen slideshow with automatic transitions
 struct SlideshowView: View {
@@ -362,7 +363,7 @@ struct SlideshowView: View {
                 }
             }
         } catch {
-            print("Failed to load photo for slideshow: \(error.localizedDescription)")
+            AppLogger.storage.error("Failed to load photo for slideshow: \(error.localizedDescription, privacy: .public)")
         }
     }
 

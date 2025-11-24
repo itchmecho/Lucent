@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 /// Manages encrypted photo storage with file operations and metadata
 actor SecurePhotoStorage {
@@ -297,7 +298,7 @@ actor SecurePhotoStorage {
             return thumbnailFileURL
         } catch {
             // Log thumbnail error but don't fail the entire import
-            print("⚠️ Thumbnail generation failed for \(photoId): \(error.localizedDescription)")
+            AppLogger.storage.warning("Thumbnail generation failed for \(photoId, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }

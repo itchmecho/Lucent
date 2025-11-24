@@ -1,4 +1,5 @@
 import SwiftUI
+import os.log
 
 struct ContentView: View {
     @State private var selectedTab = 0
@@ -161,7 +162,7 @@ struct PhotosMainView: View {
                 self.isLoading = false
             }
         } catch {
-            print("Error loading photos: \(error)")
+            AppLogger.storage.error("Error loading photos: \(error.localizedDescription, privacy: .public)")
             await MainActor.run {
                 self.isLoading = false
             }
@@ -175,7 +176,7 @@ struct PhotosMainView: View {
             await loadPhotos()
             photoToDelete = nil
         } catch {
-            print("Error deleting photo: \(error)")
+            AppLogger.storage.error("Error deleting photo: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

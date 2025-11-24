@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import os.log
 
 #if canImport(UIKit)
 import UIKit
@@ -169,16 +170,19 @@ struct PhotoPickerButton: View {
     private func handlePhotoSelection(_ results: [PHPickerResult]) {
         guard !results.isEmpty else { return }
 
-        showingImportProgress = true
+        // Delay showing progress sheet to allow picker dismissal to complete
+        // This prevents transition conflicts
+        Task { @MainActor in
+            // Wait for picker sheet to fully dismiss (0.6s is standard sheet animation)
+            try? await Task.sleep(nanoseconds: 600_000_000) // 0.6 seconds
 
-        Task {
+            showingImportProgress = true
+
             do {
                 let result = try await importManager.importPhotos(from: results)
-                await MainActor.run {
-                    onImportComplete(result)
-                }
+                onImportComplete(result)
             } catch {
-                print("Import error: \(error)")
+                AppLogger.importExport.error("Import error: \(error.localizedDescription, privacy: .public)")
             }
         }
     }

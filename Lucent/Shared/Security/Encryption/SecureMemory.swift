@@ -49,7 +49,15 @@ public enum SecureMemory {
                     wipe(UnsafeMutableRawPointer(mutating: baseAddress), count: buffer.count)
                 }
             }
-            return try block(buffer.baseAddress!, buffer.count)
+
+            // Safely unwrap baseAddress - empty buffers have nil baseAddress
+            guard let baseAddress = buffer.baseAddress else {
+                // Handle empty buffer case by calling block with empty pointer
+                let emptyPointer = UnsafeRawPointer(bitPattern: 0x1)! // Non-null but invalid for access
+                return try block(emptyPointer, 0)
+            }
+
+            return try block(baseAddress, buffer.count)
         }
     }
 }

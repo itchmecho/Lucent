@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import os.log
 
 #if canImport(UIKit)
 import UIKit
@@ -130,7 +131,7 @@ final class SettingsViewModel: ObservableObject {
                 // Calculate thumbnail cache size (placeholder - would need actual implementation)
                 thumbnailCacheSize = "~5 MB"
             } catch {
-                print("Failed to load storage stats: \(error.localizedDescription)")
+                AppLogger.settings.error("Failed to load storage stats: \(error.localizedDescription, privacy: .public)")
                 photoCount = 0
                 totalStorageBytes = 0
                 thumbnailCacheSize = "Unknown"
@@ -368,6 +369,6 @@ extension ThumbnailManager {
     func clearCache() async {
         // This would be implemented in ThumbnailManager
         // For now, this is a placeholder that the actual ThumbnailManager would implement
-        print("Clearing thumbnail cache...")
+        AppLogger.settings.info("Clearing thumbnail cache...")
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 
 /// View for entering and verifying passcode
 struct PasscodeView: View {
@@ -24,7 +25,8 @@ struct PasscodeView: View {
     @State private var showError: Bool = false
     @State private var attemptCount: Int = 0
 
-    private let maxPasscodeLength = 6
+    private let minPasscodeLength = 6
+    private let maxPasscodeLength = 8
     private let maxAttempts = 5
 
     enum PasscodeMode {
@@ -190,7 +192,7 @@ struct PasscodeView: View {
         case .verify:
             return "Enter your \(passcodeManager.isPasscodeSet ? "" : "new ")passcode"
         case .setup:
-            return "Create a 4-6 digit passcode"
+            return "Create a 6-8 digit passcode"
         case .confirm:
             return "Enter your passcode again"
         }
@@ -214,7 +216,7 @@ struct PasscodeView: View {
         switch mode {
         case .verify, .setup:
             passcode += digit
-            if passcode.count >= 4 {
+            if passcode.count >= minPasscodeLength {
                 // Auto-submit when minimum length is reached
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     handlePasscodeEntry()
@@ -222,7 +224,7 @@ struct PasscodeView: View {
             }
         case .confirm:
             confirmPasscode += digit
-            if confirmPasscode.count >= 4 {
+            if confirmPasscode.count >= minPasscodeLength {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     handlePasscodeEntry()
                 }
@@ -263,10 +265,32 @@ struct PasscodeView: View {
     }
 
     private func verifyPasscode() {
+        // Check if locked out (rate limiting)
+        if AppLockManager.shared.isLockedOut() {
+            let remainingTime = AppLockManager.shared.getRemainingLockoutTime()
+            let minutes = Int(remainingTime / 60)
+            let seconds = Int(remainingTime.truncatingRemainder(dividingBy: 60))
+
+            if minutes > 0 {
+                errorMessage = "Too many attempts. Try again in \(minutes)m \(seconds)s."
+            } else {
+                errorMessage = "Too many attempts. Try again in \(seconds)s."
+            }
+
+            withAnimation {
+                showError = true
+            }
+
+            passcode = ""
+            return
+        }
+
         let isValid = passcodeManager.verifyPasscode(passcode)
 
         if isValid {
-            // Success - haptic and callback
+            // Success - reset rate limiting and provide feedback
+            AppLockManager.shared.resetFailedAttempts()
+
             #if os(iOS)
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
@@ -274,18 +298,20 @@ struct PasscodeView: View {
 
             onSuccess()
         } else {
-            // Failed - show error and reset
-            attemptCount += 1
+            // Failed - record attempt and show error
+            AppLockManager.shared.recordFailedAttempt()
 
             #if os(iOS)
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.error)
             #endif
 
-            if attemptCount >= maxAttempts {
-                errorMessage = "Too many attempts. Please try again later."
+            let remaining = AppLockManager.shared.getRemainingAttempts()
+
+            if remaining <= 0 {
+                errorMessage = "Too many attempts. Locked for 5 minutes."
             } else {
-                errorMessage = "Incorrect passcode. \(maxAttempts - attemptCount) attempts remaining."
+                errorMessage = "Incorrect passcode. \(remaining) attempt\(remaining == 1 ? "" : "s") remaining."
             }
 
             withAnimation {
@@ -300,8 +326,8 @@ struct PasscodeView: View {
     }
 
     private func setupPasscode() {
-        guard passcode.count >= 4 else {
-            errorMessage = "Passcode must be at least 4 digits"
+        guard passcode.count >= minPasscodeLength else {
+            errorMessage = "Passcode must be at least \(minPasscodeLength) digits"
             showError = true
             return
         }

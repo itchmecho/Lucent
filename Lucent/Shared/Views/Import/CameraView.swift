@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import os.log
 
 #if canImport(UIKit)
 import UIKit
@@ -201,7 +202,7 @@ struct CameraButton: View {
                     onImportComplete(photo)
                 }
             } catch {
-                print("Import error: \(error)")
+                AppLogger.importExport.error("Import error: \(error.localizedDescription, privacy: .public)")
             }
         }
     }

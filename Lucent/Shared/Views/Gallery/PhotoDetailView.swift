@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 
 /// Full-screen photo viewer with zoom, pan, and swipe navigation
 struct PhotoDetailView: View {
@@ -358,7 +359,7 @@ struct PhotoDetailView: View {
                 }
             }
         } catch {
-            print("Failed to load photo: \(error.localizedDescription)")
+            AppLogger.storage.error("Failed to load photo: \(error.localizedDescription, privacy: .public)")
         }
 
         isLoadingImage = false

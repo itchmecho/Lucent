@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import os.log
 
 /// Manages app locking and authentication state
 @MainActor
@@ -55,6 +56,12 @@ final class AppLockManager: ObservableObject {
     private let requireAuthOnLaunchKey = "requireAuthOnLaunch"
     private let lockTimeoutKey = "lockTimeout"
     private let lastAuthenticationKey = "lastAuthenticationDate"
+    private let failedAttemptsKey = "authFailedAttempts"
+    private let lockoutUntilKey = "authLockoutUntil"
+
+    // Rate limiting settings
+    private let maxAttempts = 5
+    private let lockoutDuration: TimeInterval = 300 // 5 minutes
 
     // MARK: - Initialization
 
@@ -79,6 +86,11 @@ final class AppLockManager: ObservableObject {
     /// - Returns: True if authentication was successful
     @discardableResult
     func authenticate(reason: String = "Unlock Lucent") async -> Bool {
+        // Check if currently locked out
+        if isLockedOut() {
+            return false
+        }
+
         // Try biometric authentication first if available
         if biometricAuthManager.isBiometricAvailable {
             let result = await biometricAuthManager.authenticateWithFallback(reason: reason)
@@ -87,9 +99,12 @@ final class AppLockManager: ObservableObject {
             case .success:
                 isAuthenticated = true
                 saveLastAuthenticationDate()
+                resetFailedAttempts()
+                AppLogger.auth.info("Biometric authentication successful")
                 return true
             case .failure(let error):
-                print("Authentication failed: \(error.localizedDescription)")
+                AppLogger.auth.warning("Biometric authentication failed: \(error.localizedDescription)")
+                recordFailedAttempt()
                 return false
             }
         } else {
@@ -219,5 +234,63 @@ final class AppLockManager: ObservableObject {
     /// Retrieves the last authentication date
     private func getLastAuthenticationDate() -> Date? {
         return UserDefaults.standard.object(forKey: lastAuthenticationKey) as? Date
+    }
+
+    // MARK: - Rate Limiting
+
+    /// Records a failed authentication attempt
+    func recordFailedAttempt() {
+        let currentAttempts = getFailedAttempts()
+        let newAttempts = currentAttempts + 1
+
+        UserDefaults.standard.set(newAttempts, forKey: failedAttemptsKey)
+
+        // Apply lockout if max attempts exceeded
+        if newAttempts >= maxAttempts {
+            let lockoutDate = Date().addingTimeInterval(lockoutDuration)
+            UserDefaults.standard.set(lockoutDate, forKey: lockoutUntilKey)
+        }
+    }
+
+    /// Resets failed authentication attempts
+    func resetFailedAttempts() {
+        UserDefaults.standard.removeObject(forKey: failedAttemptsKey)
+        UserDefaults.standard.removeObject(forKey: lockoutUntilKey)
+    }
+
+    /// Gets the current number of failed attempts
+    func getFailedAttempts() -> Int {
+        return UserDefaults.standard.integer(forKey: failedAttemptsKey)
+    }
+
+    /// Checks if the user is currently locked out
+    func isLockedOut() -> Bool {
+        guard let lockoutDate = UserDefaults.standard.object(forKey: lockoutUntilKey) as? Date else {
+            return false
+        }
+
+        // Check if lockout has expired
+        if Date() >= lockoutDate {
+            // Lockout expired, reset attempts
+            resetFailedAttempts()
+            return false
+        }
+
+        return true
+    }
+
+    /// Gets remaining lockout time in seconds
+    func getRemainingLockoutTime() -> TimeInterval {
+        guard let lockoutDate = UserDefaults.standard.object(forKey: lockoutUntilKey) as? Date else {
+            return 0
+        }
+
+        let remaining = lockoutDate.timeIntervalSince(Date())
+        return max(0, remaining)
+    }
+
+    /// Gets the number of remaining attempts before lockout
+    func getRemainingAttempts() -> Int {
+        return max(0, maxAttempts - getFailedAttempts())
     }
 }

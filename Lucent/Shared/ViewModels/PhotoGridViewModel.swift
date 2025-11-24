@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os.log
 
 /// View model for managing the photo grid state and operations
 @MainActor
@@ -140,7 +141,7 @@ class PhotoGridViewModel: ObservableObject {
                 }
             }
         } catch {
-            print("Failed to load thumbnail for \(photo.id): \(error.localizedDescription)")
+            AppLogger.storage.error("Failed to load thumbnail for \(photo.id, privacy: .public): \(error.localizedDescription, privacy: .public)")
         }
 
         loadingPhotos.remove(photo.id)
