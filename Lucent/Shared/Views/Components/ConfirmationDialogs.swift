@@ -17,19 +17,16 @@ struct DeletePhotoConfirmation: ViewModifier {
     func body(content: Content) -> some View {
         content
             .confirmationDialog(
-                photoCount == 1 ? "Delete Photo?" : "Delete \(photoCount) Photos?",
+                L10n.Photos.deletePhotosTitle(photoCount),
                 isPresented: isPresented,
                 titleVisibility: .visible
             ) {
-                Button("Delete", role: .destructive) {
+                Button(L10n.Common.delete, role: .destructive) {
                     onConfirm()
                 }
-                Button("Cancel", role: .cancel) {}
+                Button(L10n.Common.cancel, role: .cancel) {}
             } message: {
-                Text(photoCount == 1
-                    ? "This photo will be permanently deleted. This action cannot be undone."
-                    : "These \(photoCount) photos will be permanently deleted. This action cannot be undone."
-                )
+                Text(L10n.Photos.deletePhotosMessage(photoCount))
             }
     }
 }
@@ -63,19 +60,16 @@ struct ExportPhotoConfirmation: ViewModifier {
     func body(content: Content) -> some View {
         content
             .confirmationDialog(
-                photoCount == 1 ? "Export Photo?" : "Export \(photoCount) Photos?",
+                L10n.Photos.exportPhotosTitle(photoCount),
                 isPresented: isPresented,
                 titleVisibility: .visible
             ) {
-                Button("Export to Photo Library") {
+                Button(L10n.Photos.exportToLibrary) {
                     onConfirm()
                 }
-                Button("Cancel", role: .cancel) {}
+                Button(L10n.Common.cancel, role: .cancel) {}
             } message: {
-                Text(photoCount == 1
-                    ? "This photo will be decrypted and saved to your photo library."
-                    : "These \(photoCount) photos will be decrypted and saved to your photo library."
-                )
+                Text(L10n.Photos.exportPhotosMessage(photoCount))
             }
     }
 }
@@ -116,7 +110,7 @@ struct MoveToAlbumSheet: View {
             List {
                 // Existing Albums
                 if !availableAlbums.isEmpty {
-                    Section("Albums") {
+                    Section(L10n.Albums.title) {
                         ForEach(availableAlbums, id: \.self) { album in
                             Button(action: {
                                 selectedAlbum = album
@@ -141,7 +135,7 @@ struct MoveToAlbumSheet: View {
                         HStack {
                             Image(systemName: "folder.badge.plus")
                                 .foregroundStyle(.blue)
-                            TextField("Album Name", text: $newAlbumName)
+                            TextField(L10n.Albums.albumName, text: $newAlbumName)
                                 .textFieldStyle(.plain)
                                 .submitLabel(.done)
                                 .onSubmit {
@@ -155,7 +149,7 @@ struct MoveToAlbumSheet: View {
                         Button(action: {
                             isCreatingNewAlbum = true
                         }) {
-                            Label("Create New Album", systemImage: "folder.badge.plus")
+                            Label(L10n.Albums.createNewAlbum, systemImage: "folder.badge.plus")
                         }
                     }
                 }
@@ -164,7 +158,7 @@ struct MoveToAlbumSheet: View {
                 if photoCount > 1 {
                     Section {
                         HStack {
-                            Text("Photos to Move")
+                            Text(L10n.Albums.photosToMove)
                             Spacer()
                             Text("\(photoCount)")
                                 .foregroundStyle(.secondary)
@@ -172,16 +166,16 @@ struct MoveToAlbumSheet: View {
                     }
                 }
             }
-            .navigationTitle("Move to Album")
+            .navigationTitle(L10n.Albums.moveToAlbum)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(L10n.Common.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Move") {
+                    Button(L10n.Common.move) {
                         if let album = selectedAlbum {
                             onMove(album)
                             dismiss()
@@ -211,7 +205,7 @@ struct AddTagsSheet: View {
             List {
                 // Existing Tags
                 if !availableTags.isEmpty {
-                    Section("Tags") {
+                    Section(L10n.Tags.title) {
                         ForEach(availableTags, id: \.self) { tag in
                             Button(action: {
                                 if selectedTags.contains(tag) {
@@ -240,7 +234,7 @@ struct AddTagsSheet: View {
                         HStack {
                             Image(systemName: "tag.fill")
                                 .foregroundStyle(.blue)
-                            TextField("Tag Name", text: $newTagName)
+                            TextField(L10n.Tags.tagName, text: $newTagName)
                                 .textFieldStyle(.plain)
                                 .submitLabel(.done)
                                 .onSubmit {
@@ -255,14 +249,14 @@ struct AddTagsSheet: View {
                         Button(action: {
                             isCreatingNewTag = true
                         }) {
-                            Label("Create New Tag", systemImage: "tag.fill")
+                            Label(L10n.Tags.createNewTag, systemImage: "tag.fill")
                         }
                     }
                 }
 
                 // Selected Tags
                 if !selectedTags.isEmpty {
-                    Section("Selected Tags") {
+                    Section(L10n.Tags.selectedTags) {
                         ForEach(Array(selectedTags), id: \.self) { tag in
                             HStack {
                                 Text(tag)
@@ -283,7 +277,7 @@ struct AddTagsSheet: View {
                 if photoCount > 1 {
                     Section {
                         HStack {
-                            Text("Photos to Tag")
+                            Text(L10n.Tags.photosToTag)
                             Spacer()
                             Text("\(photoCount)")
                                 .foregroundStyle(.secondary)
@@ -291,16 +285,16 @@ struct AddTagsSheet: View {
                     }
                 }
             }
-            .navigationTitle("Add Tags")
+            .navigationTitle(L10n.Tags.addTags)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(L10n.Common.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
+                    Button(L10n.Common.add) {
                         onAddTags(Array(selectedTags))
                         dismiss()
                     }
@@ -343,10 +337,10 @@ extension View {
         isPresented: Binding<Bool>,
         error: String?
     ) -> some View {
-        alert("Operation Failed", isPresented: isPresented) {
-            Button("OK", role: .cancel) {}
+        alert(L10n.Alerts.operationFailed, isPresented: isPresented) {
+            Button(L10n.Common.ok, role: .cancel) {}
         } message: {
-            Text(error ?? "An unknown error occurred")
+            Text(error ?? L10n.Alerts.unknownError)
         }
     }
 
@@ -355,10 +349,10 @@ extension View {
         isPresented: Binding<Bool>,
         message: String?
     ) -> some View {
-        alert("Success", isPresented: isPresented) {
-            Button("OK", role: .cancel) {}
+        alert(L10n.Common.success, isPresented: isPresented) {
+            Button(L10n.Common.ok, role: .cancel) {}
         } message: {
-            Text(message ?? "Operation completed successfully")
+            Text(message ?? L10n.Alerts.operationSuccess)
         }
     }
 }

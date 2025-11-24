@@ -149,8 +149,8 @@ final class SettingsViewModel: ObservableObject {
 
     /// Initiates passcode change flow
     func changePasscode() {
-        alertTitle = "Change Passcode"
-        alertMessage = "This feature will allow you to change your passcode. Implementation coming soon."
+        alertTitle = L10n.Settings.changePasscodeTitle
+        alertMessage = L10n.Settings.changePasscodeMessage
         isDestructiveAlert = false
         showAlert = true
     }
@@ -159,8 +159,8 @@ final class SettingsViewModel: ObservableObject {
 
     /// Shows confirmation dialog for clearing thumbnail cache
     func showClearCacheConfirmation() {
-        alertTitle = "Clear Thumbnail Cache"
-        alertMessage = "This will clear cached thumbnails and free up space. Thumbnails will be regenerated when needed."
+        alertTitle = L10n.Settings.clearThumbnailCache
+        alertMessage = L10n.Settings.clearCacheMessage
         isDestructiveAlert = true
         pendingAction = { [weak self] in
             self?.clearThumbnailCache()
@@ -178,8 +178,8 @@ final class SettingsViewModel: ObservableObject {
             thumbnailCacheSize = "0 KB"
 
             // Show success message
-            alertTitle = "Success"
-            alertMessage = "Thumbnail cache has been cleared."
+            alertTitle = L10n.Common.success
+            alertMessage = L10n.Settings.cacheCleared
             isDestructiveAlert = false
             showAlert = true
         }
@@ -197,8 +197,8 @@ final class SettingsViewModel: ObservableObject {
 
     /// Exports non-sensitive metadata
     func exportMetadata() {
-        alertTitle = "Export Metadata"
-        alertMessage = "This will export non-sensitive metadata (dates, tags, albums) to a file. Photos and encryption keys will NOT be included."
+        alertTitle = L10n.Settings.exportMetadata
+        alertMessage = L10n.Settings.exportMetadataMessage
         isDestructiveAlert = false
         showAlert = true
 
@@ -209,8 +209,8 @@ final class SettingsViewModel: ObservableObject {
 
     /// Opens the privacy policy
     func openPrivacyPolicy() {
-        alertTitle = "Privacy Policy"
-        alertMessage = "Lucent is committed to your privacy. All photos are stored locally on your device with end-to-end encryption. No data is collected or transmitted."
+        alertTitle = L10n.Settings.privacyPolicy
+        alertMessage = L10n.Settings.privacyMessage
         isDestructiveAlert = false
         showAlert = true
 
@@ -219,8 +219,8 @@ final class SettingsViewModel: ObservableObject {
 
     /// Opens open source licenses
     func openLicenses() {
-        alertTitle = "Open Source Licenses"
-        alertMessage = "This app is built with open source software. License information will be available in a future update."
+        alertTitle = L10n.Settings.openSourceLicenses
+        alertMessage = L10n.Settings.licensesMessage
         isDestructiveAlert = false
         showAlert = true
 
@@ -249,15 +249,15 @@ enum AutoLockOption: CaseIterable {
     var displayName: String {
         switch self {
         case .immediate:
-            return "Immediate"
+            return L10n.Settings.immediate
         case .oneMinute:
-            return "1 Minute"
+            return L10n.Settings.oneMinute
         case .fiveMinutes:
-            return "5 Minutes"
+            return L10n.Settings.fiveMinutes
         case .fifteenMinutes:
-            return "15 Minutes"
+            return L10n.Settings.fifteenMinutes
         case .never:
-            return "Never"
+            return L10n.Settings.never
         }
     }
 
@@ -305,11 +305,11 @@ enum AppearanceMode: String, CaseIterable {
     var displayName: String {
         switch self {
         case .system:
-            return "System"
+            return L10n.Settings.system
         case .light:
-            return "Light"
+            return L10n.Settings.light
         case .dark:
-            return "Dark"
+            return L10n.Settings.dark
         }
     }
 
