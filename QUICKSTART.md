@@ -1,9 +1,9 @@
-# PhotoKeepSafe - Quick Start Guide
+# Lucent - Quick Start Guide
 
 ## Current Status
 
 All project files are created and ready at:
-`/Users/sam/Documents/github/PhotoKeepSafe`
+`/Users/sam/Documents/github/PhotoKeepSafe` (will be renamed to Lucent)
 
 The only missing piece is the `.xcodeproj` file, which needs to be generated.
 
@@ -24,7 +24,7 @@ cd /Users/sam/Documents/github/PhotoKeepSafe
 xcodegen generate
 
 # Open in Xcode
-open PhotoKeepSafe.xcodeproj
+open Lucent.xcodeproj
 ```
 
 That's it! The project is ready to build and run.
@@ -50,20 +50,20 @@ Create the project through Xcode GUI:
 ## Files Created
 
 ```
-PhotoKeepSafe/
-├── PhotoKeepSafe/Shared/
-│   ├── PhotoKeepSafeApp.swift          # App entry point
+Lucent/
+├── Lucent/Shared/
+│   ├── LucentApp.swift                 # App entry point
 │   └── ContentView.swift               # Main view
-├── PhotoKeepSafe/iOS/
+├── Lucent/iOS/
 │   └── Assets.xcassets/                # iOS assets
-├── PhotoKeepSafe/macOS/
+├── Lucent/macOS/
 │   ├── Assets.xcassets/                # macOS assets
-│   └── PhotoKeepSafe.entitlements      # Entitlements
-├── PhotoKeepSafeTests/
-│   └── PhotoKeepSafeTests.swift        # Unit tests
-├── PhotoKeepSafeUITests/
-│   ├── PhotoKeepSafeUITests.swift      # UI tests
-│   └── PhotoKeepSafeUITestsLaunchTests.swift
+│   └── Lucent.entitlements             # Entitlements
+├── LucentTests/
+│   └── LucentTests.swift               # Unit tests
+├── LucentUITests/
+│   ├── LucentUITests.swift             # UI tests
+│   └── LucentUITestsLaunchTests.swift
 ├── project.yml                          # XcodeGen config
 ├── generate-project.sh                  # Helper script
 └── README.md                            # Documentation
@@ -81,8 +81,8 @@ PhotoKeepSafe/
 ## After Opening in Xcode
 
 1. **Select a scheme:**
-   - PhotoKeepSafe (iOS) for iPhone/iPad
-   - PhotoKeepSafe (macOS) for Mac
+   - Lucent (iOS) for iPhone/iPad
+   - Lucent (macOS) for Mac
 
 2. **Build:** Cmd+B
 
@@ -103,7 +103,7 @@ cd /Users/sam/Documents/github/PhotoKeepSafe
 xcodegen generate
 
 # Open in Xcode
-open PhotoKeepSafe.xcodeproj
+open Lucent.xcodeproj
 
 # View this guide
 cat QUICKSTART.md

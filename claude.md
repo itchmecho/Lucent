@@ -1,4 +1,4 @@
-# PhotoKeepSafe - Claude Project Guidelines
+# Lucent - Claude Project Guidelines
 
 **See workspace communication & development guidelines**: [../CLAUDE.md](../CLAUDE.md) and [../CLAUDE-GUIDELINES.md](../CLAUDE-GUIDELINES.md)
 
@@ -36,8 +36,8 @@ A Swift-based iOS/iPadOS/macOS app for securely storing photos locally with adva
 ## File Structure
 
 ```
-PhotoKeepSafe/
-├── PhotoKeepSafe/              # Main app target
+Lucent/
+├── Lucent/                     # Main app target
 │   ├── App/                    # App lifecycle and configuration
 │   ├── Views/                  # SwiftUI views
 │   │   ├── Components/        # Reusable UI components (liquid glass)
@@ -46,8 +46,8 @@ PhotoKeepSafe/
 │   ├── Security/              # Encryption and authentication logic
 │   ├── Storage/               # Photo storage management
 │   └── Resources/             # Assets, colors, fonts
-├── PhotoKeepSafeTests/        # Unit tests
-└── PhotoKeepSafeUITests/      # UI tests
+├── LucentTests/               # Unit tests
+└── LucentUITests/             # UI tests
 ```
 
 ## Important Notes
@@ -64,17 +64,17 @@ PhotoKeepSafe/
 ### Building the Project
 
 ```bash
-xcodebuild -scheme PhotoKeepSafe -destination 'platform=iOS Simulator,name=iPhone 15 Pro' build
+xcodebuild -scheme Lucent -destination 'platform=iOS Simulator,name=iPhone 15 Pro' build
 ```
 
 ### Testing
 
 ```bash
 # Run all tests
-xcodebuild test -scheme PhotoKeepSafe -destination 'platform=iOS Simulator,name=iPhone 15 Pro'
+xcodebuild test -scheme Lucent -destination 'platform=iOS Simulator,name=iPhone 15 Pro'
 
 # Security tests must pass before any commit
-xcodebuild test -scheme PhotoKeepSafe -only-testing:PhotoKeepSafeTests/SecurityTests
+xcodebuild test -scheme Lucent -only-testing:LucentTests/SecurityTests
 ```
 
 ### Code Signing & Distribution

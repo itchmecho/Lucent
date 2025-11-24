@@ -1,6 +1,6 @@
-# PhotoKeepSafe - Project Roadmap & Tasks
+# Lucent - Project Roadmap & Tasks
 
-> **This is your first iOS/iPadOS/macOS app - we'll build it step by step!**
+> **Lucent - Photo Vault: A secure photo storage app with a beautiful liquid glass aesthetic**
 
 ## Current Phase: Phase 2 - Core Security Infrastructure
 

@@ -6,7 +6,7 @@ struct ContentView: View {
             Image(systemName: "photo.stack")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("PhotoKeepSafe")
+            Text("Lucent")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             Text("Your photos, securely stored")

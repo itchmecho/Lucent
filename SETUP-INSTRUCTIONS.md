@@ -1,4 +1,4 @@
-# PhotoKeepSafe - Xcode Project Setup Instructions
+# Lucent - Xcode Project Setup Instructions
 
 Since Xcode's project file format is complex and creating it manually can be error-prone, follow these instructions to create the project correctly using Xcode's GUI.
 
@@ -17,10 +17,10 @@ Since Xcode's project file format is complex and creating it manually can be err
 
 Enter the following settings exactly:
 
-- **Product Name:** `PhotoKeepSafe`
+- **Product Name:** `Lucent`
 - **Team:** Leave blank or select your team if you have one
-- **Organization Identifier:** `com.photokeepsafe` (or your own)
-- **Bundle Identifier:** Will auto-populate as `com.photokeepsafe.app`
+- **Organization Identifier:** `com.lucent` (or your own)
+- **Bundle Identifier:** Will auto-populate as `com.lucent.app`
 - **Interface:** Select **SwiftUI**
 - **Language:** Select **Swift**
 - **Storage:** CoreData (uncheck)
@@ -31,7 +31,7 @@ Click **Next**
 ### Step 3: Choose Location
 
 1. Navigate to: `/Users/sam/Documents/github/`
-2. In the "Save As" field, it should show `PhotoKeepSafe`
+2. In the "Save As" field, it should show `Lucent`
 3. **IMPORTANT:** Uncheck "Create Git repository" (since we already have one)
 4. Click **Create**
 
@@ -39,13 +39,13 @@ Click **Next**
 
 For **iOS Target:**
 1. Select the project in the Project Navigator (blue icon at top)
-2. Select the **PhotoKeepSafe (iOS)** target
+2. Select the **Lucent (iOS)** target
 3. In the **General** tab:
    - Set **Minimum Deployments** to **iOS 18.0**
    - Under **Supported Destinations**, ensure iPhone and iPad are checked
 
 For **macOS Target:**
-1. Select the **PhotoKeepSafe (macOS)** target
+1. Select the **Lucent (macOS)** target
 2. In the **General** tab:
    - Set **Minimum Deployments** to **macOS 15.0**
 
@@ -59,10 +59,10 @@ For **macOS Target:**
 ### Step 6: Verify Test Targets
 
 Make sure the following test targets exist:
-- PhotoKeepSafeTests (iOS)
-- PhotoKeepSafeTests (macOS)
-- PhotoKeepSafeUITests (iOS)
-- PhotoKeepSafeUITests (macOS)
+- LucentTests (iOS)
+- LucentTests (macOS)
+- LucentUITests (iOS)
+- LucentUITests (macOS)
 
 If they don't all exist, Xcode should have created at least iOS versions automatically.
 
@@ -70,8 +70,8 @@ If they don't all exist, Xcode should have created at least iOS versions automat
 
 If you already have code files in the directory:
 
-1. In Xcode's Project Navigator, right-click on the `PhotoKeepSafe` group
-2. Select **Add Files to "PhotoKeepSafe"...**
+1. In Xcode's Project Navigator, right-click on the `Lucent` group
+2. Select **Add Files to "Lucent"...**
 3. Select the files you want to add
 4. Make sure to:
    - Check "Copy items if needed" (if you want duplicates removed)
@@ -82,13 +82,13 @@ If you already have code files in the directory:
 ### Build Each Platform
 
 1. **For iOS:**
-   - Select scheme: **PhotoKeepSafe (iOS)** from the scheme dropdown
+   - Select scheme: **Lucent (iOS)** from the scheme dropdown
    - Select a simulator or device
    - Press Cmd+B to build
    - Press Cmd+R to run
 
 2. **For macOS:**
-   - Select scheme: **PhotoKeepSafe (macOS)** from the scheme dropdown
+   - Select scheme: **Lucent (macOS)** from the scheme dropdown
    - Select "My Mac"
    - Press Cmd+B to build
    - Press Cmd+R to run
@@ -103,21 +103,21 @@ If you already have code files in the directory:
 Your final project structure should look like this:
 
 ```
-PhotoKeepSafe/
-├── PhotoKeepSafe.xcodeproj/
+Lucent/
+├── Lucent.xcodeproj/
 │   ├── project.pbxproj
 │   └── project.xcworkspace/
-├── PhotoKeepSafe/
-│   ├── PhotoKeepSafeApp.swift      # Main app entry point
+├── Lucent/
+│   ├── LucentApp.swift              # Main app entry point
 │   ├── ContentView.swift            # Main view
 │   ├── Assets.xcassets (iOS)/       # iOS assets
 │   ├── Assets.xcassets (macOS)/     # macOS assets
-│   └── PhotoKeepSafe.entitlements   # macOS entitlements
-├── PhotoKeepSafeTests/
-│   └── PhotoKeepSafeTests.swift
-├── PhotoKeepSafeUITests/
-│   ├── PhotoKeepSafeUITests.swift
-│   └── PhotoKeepSafeUITestsLaunchTests.swift
+│   └── Lucent.entitlements          # macOS entitlements
+├── LucentTests/
+│   └── LucentTests.swift
+├── LucentUITests/
+│   ├── LucentUITests.swift
+│   └── LucentUITestsLaunchTests.swift
 ├── .gitignore
 └── README.md
 ```
@@ -162,69 +162,69 @@ If you prefer automation, you can use `xcodegen`:
 ### project.yml for xcodegen:
 
 ```yaml
-name: PhotoKeepSafe
+name: Lucent
 options:
-  bundleIdPrefix: com.photokeepsafe
+  bundleIdPrefix: com.lucent
   deploymentTarget:
     iOS: "18.0"
     macOS: "15.0"
 settings:
   SWIFT_VERSION: "6.0"
 targets:
-  PhotoKeepSafe (iOS):
+  Lucent (iOS):
     type: application
     platform: iOS
     sources:
-      - PhotoKeepSafe/Shared
-      - PhotoKeepSafe/iOS
+      - Lucent/Shared
+      - Lucent/iOS
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.app
+      PRODUCT_BUNDLE_IDENTIFIER: com.lucent.app
       INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
-  PhotoKeepSafe (macOS):
+  Lucent (macOS):
     type: application
     platform: macOS
     sources:
-      - PhotoKeepSafe/Shared
-      - PhotoKeepSafe/macOS
+      - Lucent/Shared
+      - Lucent/macOS
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.photokeepsafe.app
+      PRODUCT_BUNDLE_IDENTIFIER: com.lucent.app
       ENABLE_HARDENED_RUNTIME: YES
-  PhotoKeepSafeTests (iOS):
+  LucentTests (iOS):
     type: bundle.unit-test
     platform: iOS
     sources:
-      - PhotoKeepSafeTests
+      - LucentTests
     dependencies:
-      - target: PhotoKeepSafe (iOS)
-  PhotoKeepSafeTests (macOS):
+      - target: Lucent (iOS)
+  LucentTests (macOS):
     type: bundle.unit-test
     platform: macOS
     sources:
-      - PhotoKeepSafeTests
+      - LucentTests
     dependencies:
-      - target: PhotoKeepSafe (macOS)
-  PhotoKeepSafeUITests (iOS):
+      - target: Lucent (macOS)
+  LucentUITests (iOS):
     type: bundle.ui-testing
     platform: iOS
     sources:
-      - PhotoKeepSafeUITests
+      - LucentUITests
     dependencies:
-      - target: PhotoKeepSafe (iOS)
-  PhotoKeepSafeUITests (macOS):
+      - target: Lucent (iOS)
+  LucentUITests (macOS):
     type: bundle.ui-testing
     platform: macOS
     sources:
-      - PhotoKeepSafeUITests
+      - LucentUITests
     dependencies:
-      - target: PhotoKeepSafe (macOS)
+      - target: Lucent (macOS)
 ```
 
 ## Next Steps
 
 Once your project is set up:
 
-1. Review the starter code in `PhotoKeepSafeApp.swift` and `ContentView.swift`
+1. Review the starter code in `LucentApp.swift` and `ContentView.swift`
 2. Start building your features
 3. Run tests regularly with Cmd+U
 4. Commit your changes to git

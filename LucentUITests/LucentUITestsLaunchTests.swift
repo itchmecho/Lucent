@@ -1,6 +1,6 @@
 import XCTest
 
-final class PhotoKeepSafeUITestsLaunchTests: XCTestCase {
+final class LucentUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

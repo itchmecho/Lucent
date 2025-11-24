@@ -1,6 +1,6 @@
-# PhotoKeepSafe
+# Lucent
 
-A secure photo storage application for iOS, iPadOS, and macOS.
+A secure photo storage application for iOS, iPadOS, and macOS with a beautiful liquid glass aesthetic.
 
 ## Requirements
 
@@ -15,17 +15,17 @@ A secure photo storage application for iOS, iPadOS, and macOS.
 The project is organized as a multi-platform application with shared code:
 
 ```
-PhotoKeepSafe/
+Lucent/
 ├── Shared/              # Shared code between platforms
-│   ├── PhotoKeepSafeApp.swift
+│   ├── LucentApp.swift
 │   └── ContentView.swift
 ├── iOS/                 # iOS-specific resources
 │   └── Assets.xcassets
 ├── macOS/               # macOS-specific resources
 │   ├── Assets.xcassets
-│   └── PhotoKeepSafe.entitlements
-├── PhotoKeepSafeTests/  # Unit tests
-└── PhotoKeepSafeUITests/ # UI tests
+│   └── Lucent.entitlements
+├── LucentTests/         # Unit tests
+└── LucentUITests/       # UI tests
 ```
 
 ## Features
@@ -38,10 +38,10 @@ PhotoKeepSafe/
 
 ## Building
 
-1. Open `PhotoKeepSafe.xcodeproj` in Xcode
+1. Open `Lucent.xcodeproj` in Xcode
 2. Select the desired target:
-   - PhotoKeepSafe (iOS)
-   - PhotoKeepSafe (macOS)
+   - Lucent (iOS)
+   - Lucent (macOS)
 3. Choose your destination (Simulator, Device, or Mac)
 4. Press Cmd+R to build and run
 
@@ -49,8 +49,8 @@ PhotoKeepSafe/
 
 The project includes both Unit Tests and UI Tests:
 
-- Unit Tests: `PhotoKeepSafeTests`
-- UI Tests: `PhotoKeepSafeUITests`
+- Unit Tests: `LucentTests`
+- UI Tests: `LucentUITests`
 
 Run tests with Cmd+U or through the Test Navigator.
 
