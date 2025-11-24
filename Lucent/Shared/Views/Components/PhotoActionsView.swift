@@ -260,7 +260,6 @@ extension View {
 #Preview("Photo Actions") {
     PhotoActionsView(
         photo: EncryptedPhoto(
-            encryptedFileURL: URL(fileURLWithPath: "/tmp/test.enc"),
             metadata: PhotoMetadata(fileSize: 1024 * 1024)
         ),
         onAction: { _ in }

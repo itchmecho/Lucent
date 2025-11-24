@@ -8,17 +8,25 @@
 import Foundation
 
 /// Represents an encrypted photo stored in the secure vault
-struct EncryptedPhoto: Identifiable, Codable, Sendable {
+struct EncryptedPhoto: Identifiable, Sendable {
     // MARK: - Properties
 
     /// Unique identifier for the photo
     let id: UUID
 
-    /// URL to the encrypted photo file
-    let encryptedFileURL: URL
+    /// URL to the encrypted photo file (dynamically constructed)
+    var encryptedFileURL: URL {
+        SecurePhotoStorage.shared.encryptedPhotosURL.appendingPathComponent("\(id.uuidString).enc")
+    }
 
-    /// URL to the encrypted thumbnail file (optional)
-    var thumbnailURL: URL?
+    /// URL to the encrypted thumbnail file (dynamically constructed if thumbnail exists)
+    var thumbnailURL: URL? {
+        guard hasThumbnail else { return nil }
+        return SecurePhotoStorage.shared.thumbnailsURL.appendingPathComponent("\(id.uuidString)_thumb.enc")
+    }
+
+    /// Whether a thumbnail exists for this photo
+    private(set) var hasThumbnail: Bool
 
     /// Metadata associated with the photo
     var metadata: PhotoMetadata
@@ -30,16 +38,21 @@ struct EncryptedPhoto: Identifiable, Codable, Sendable {
 
     init(
         id: UUID = UUID(),
-        encryptedFileURL: URL,
-        thumbnailURL: URL? = nil,
+        hasThumbnail: Bool = false,
         metadata: PhotoMetadata,
         dateAdded: Date = Date()
     ) {
         self.id = id
-        self.encryptedFileURL = encryptedFileURL
-        self.thumbnailURL = thumbnailURL
+        self.hasThumbnail = hasThumbnail
         self.metadata = metadata
         self.dateAdded = dateAdded
+    }
+
+    // MARK: - Helper Methods
+
+    /// Updates thumbnail availability status
+    mutating func setHasThumbnail(_ has: Bool) {
+        self.hasThumbnail = has
     }
 
     // MARK: - Computed Properties
@@ -47,11 +60,6 @@ struct EncryptedPhoto: Identifiable, Codable, Sendable {
     /// The original filename if available
     var filename: String {
         metadata.originalFilename ?? "Photo \(id.uuidString.prefix(8))"
-    }
-
-    /// Whether a thumbnail is available
-    var hasThumbnail: Bool {
-        thumbnailURL != nil
     }
 
     /// Date the photo was taken, falling back to date added
@@ -82,6 +90,33 @@ struct EncryptedPhoto: Identifiable, Codable, Sendable {
     /// Albums this photo belongs to
     var albums: [String] {
         metadata.albums
+    }
+}
+
+// MARK: - Codable Conformance
+
+extension EncryptedPhoto: Codable {
+    enum CodingKeys: String, CodingKey {
+        case id
+        case hasThumbnail
+        case metadata
+        case dateAdded
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.hasThumbnail = try container.decodeIfPresent(Bool.self, forKey: .hasThumbnail) ?? false
+        self.metadata = try container.decode(PhotoMetadata.self, forKey: .metadata)
+        self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(hasThumbnail, forKey: .hasThumbnail)
+        try container.encode(metadata, forKey: .metadata)
+        try container.encode(dateAdded, forKey: .dateAdded)
     }
 }
 

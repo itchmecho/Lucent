@@ -434,7 +434,6 @@ struct FlowLayout: Layout {
 #Preview {
     PhotoMetadataView(
         photo: EncryptedPhoto(
-            encryptedFileURL: URL(fileURLWithPath: "/tmp/test.enc"),
             metadata: PhotoMetadata(
                 originalFilename: "IMG_1234.jpg",
                 fileSize: 2_500_000,

@@ -386,7 +386,6 @@ struct PhotoDetailView: View {
 #Preview {
     PhotoDetailView(
         photo: EncryptedPhoto(
-            encryptedFileURL: URL(fileURLWithPath: "/tmp/test.enc"),
             metadata: PhotoMetadata(fileSize: 1024)
         ),
         allPhotos: [],

@@ -18,8 +18,17 @@ actor SecurePhotoStorage {
 
     private let fileManager = FileManager.default
     private let baseURL: URL
-    private let encryptedPhotosURL: URL
-    private let thumbnailsURL: URL
+
+    /// Public access to encrypted photos directory (for URL construction)
+    nonisolated var encryptedPhotosURL: URL {
+        baseURL.appendingPathComponent(Self.encryptedPhotosFolderName, isDirectory: true)
+    }
+
+    /// Public access to thumbnails directory (for URL construction)
+    nonisolated var thumbnailsURL: URL {
+        baseURL.appendingPathComponent(Self.thumbnailsFolderName, isDirectory: true)
+    }
+
     private let metadataURL: URL
 
     // MARK: - Constants
@@ -77,8 +86,6 @@ actor SecurePhotoStorage {
         }
 
         self.baseURL = documentsURL.appendingPathComponent("LucentVault", isDirectory: true)
-        self.encryptedPhotosURL = baseURL.appendingPathComponent(Self.encryptedPhotosFolderName, isDirectory: true)
-        self.thumbnailsURL = baseURL.appendingPathComponent(Self.thumbnailsFolderName, isDirectory: true)
         self.metadataURL = baseURL.appendingPathComponent(Self.metadataFolderName, isDirectory: true)
     }
 
@@ -129,13 +136,12 @@ actor SecurePhotoStorage {
             try encryptedData.write(to: photoFileURL)
 
             // Generate and save thumbnail (optional - won't fail import if it fails)
-            let thumbnailURL = try await generateAndSaveThumbnail(from: data, photoId: photoId)
+            let hasThumbnail = (try? await generateAndSaveThumbnail(from: data, photoId: photoId)) != nil
 
-            // Create EncryptedPhoto object
+            // Create EncryptedPhoto object with hasThumbnail flag
             let photo = EncryptedPhoto(
                 id: photoId,
-                encryptedFileURL: photoFileURL,
-                thumbnailURL: thumbnailURL,  // May be nil if thumbnail generation failed
+                hasThumbnail: hasThumbnail,
                 metadata: metadata,
                 dateAdded: Date()
             )

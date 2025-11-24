@@ -389,11 +389,9 @@ struct SlideshowView: View {
     SlideshowView(
         photos: [
             EncryptedPhoto(
-                encryptedFileURL: URL(fileURLWithPath: "/tmp/test1.enc"),
                 metadata: PhotoMetadata(fileSize: 1024)
             ),
             EncryptedPhoto(
-                encryptedFileURL: URL(fileURLWithPath: "/tmp/test2.enc"),
                 metadata: PhotoMetadata(fileSize: 2048)
             )
         ],
