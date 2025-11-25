@@ -150,7 +150,13 @@ struct AlbumPreviewCard: View {
                 Rectangle()
                     .fill(
                         LinearGradient(
-                            colors: color != nil ? [color!, color!.opacity(0.7)] : [.purple, .pink],
+                            colors: {
+                                if let c = color {
+                                    return [c, c.opacity(0.7)]
+                                } else {
+                                    return [.purple, .pink]
+                                }
+                            }(),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )

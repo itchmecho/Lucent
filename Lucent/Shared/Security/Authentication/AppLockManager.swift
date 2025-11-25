@@ -52,6 +52,14 @@ final class AppLockManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var backgroundDate: Date?
 
+    /// Tracks when we're actively in the biometric authentication flow
+    /// This prevents the app from re-locking immediately after Face ID succeeds
+    private var isAuthenticationInProgress = false
+
+    /// Grace period after authentication to prevent immediate re-lock
+    private var lastSuccessfulAuthTime: Date?
+    private let authGracePeriod: TimeInterval = 2.0  // 2 seconds grace period
+
     private let appLockEnabledKey = "appLockEnabled"
     private let requireAuthOnLaunchKey = "requireAuthOnLaunch"
     private let lockTimeoutKey = "lockTimeout"
@@ -91,6 +99,10 @@ final class AppLockManager: ObservableObject {
             return false
         }
 
+        // Mark that authentication is in progress to prevent race conditions
+        isAuthenticationInProgress = true
+        defer { isAuthenticationInProgress = false }
+
         // Try biometric authentication first if available
         if biometricAuthManager.isBiometricAvailable {
             let result = await biometricAuthManager.authenticateWithFallback(reason: reason)
@@ -98,6 +110,7 @@ final class AppLockManager: ObservableObject {
             switch result {
             case .success:
                 isAuthenticated = true
+                lastSuccessfulAuthTime = Date()  // Set grace period start
                 saveLastAuthenticationDate()
                 resetFailedAttempts()
                 AppLogger.auth.info("Biometric authentication successful")
@@ -114,29 +127,54 @@ final class AppLockManager: ObservableObject {
         }
     }
 
+    /// Marks authentication as successful (for passcode or other auth methods)
+    /// Sets the grace period and updates authentication state
+    func markAuthenticationSuccessful() {
+        isAuthenticated = true
+        lastSuccessfulAuthTime = Date()
+        saveLastAuthenticationDate()
+        resetFailedAttempts()
+        AppLogger.auth.info("Authentication marked as successful")
+    }
+
     /// Locks the app immediately
     func lockApp() {
         isAuthenticated = false
     }
 
-    /// Checks if authentication is required based on time elapsed
-    func shouldRequireAuthentication() -> Bool {
+    /// Checks if re-authentication is required based on time spent in background
+    /// This is used when returning from background to decide if we should lock
+    func shouldRequireReauthentication() -> Bool {
         guard isAppLockEnabled else {
             return false
         }
 
-        // Always require auth on launch if enabled
-        if requireAuthOnLaunch && !isAuthenticated {
+        // If timeout is "Never" (.infinity), never require re-auth from background
+        if lockTimeout == .infinity {
+            return false
+        }
+
+        // If timeout is immediate (0), always require re-auth
+        if lockTimeout == 0 {
             return true
         }
 
-        // Check if timeout has elapsed
-        guard let lastAuthDate = getLastAuthenticationDate() else {
-            return true
+        // Check time spent in background
+        guard let bgDate = backgroundDate else {
+            // No background date - shouldn't happen, but don't lock
+            return false
         }
 
-        let elapsed = Date().timeIntervalSince(lastAuthDate)
-        return elapsed >= lockTimeout
+        let timeInBackground = Date().timeIntervalSince(bgDate)
+        return timeInBackground >= lockTimeout
+    }
+
+    /// Checks if initial authentication is required (for app launch)
+    func shouldRequireInitialAuthentication() -> Bool {
+        guard isAppLockEnabled else {
+            return false
+        }
+        return requireAuthOnLaunch && !isAuthenticated
     }
 
     /// Enables app lock with the specified settings
@@ -198,19 +236,45 @@ final class AppLockManager: ObservableObject {
         #endif
     }
 
-    /// Called when the app will resign active state
+    /// Called when the app will resign active state (loses focus)
     private func handleAppWillResignActive() {
         guard isAppLockEnabled else { return }
         backgroundDate = Date()
+
+        // "Immediate" lock means lock as soon as app loses focus
+        // (not just when going to background)
+        if lockTimeout == 0 {
+            AppLogger.auth.info("Immediate lock: app resigned active")
+            isAuthenticated = false
+        }
     }
 
     /// Called when the app becomes active
     private func handleAppDidBecomeActive() {
         guard isAppLockEnabled else { return }
 
-        if shouldRequireAuthentication() {
+        // Don't re-lock if authentication is currently in progress (Face ID showing)
+        guard !isAuthenticationInProgress else {
+            AppLogger.auth.debug("Skipping re-lock: authentication in progress")
+            return
+        }
+
+        // Don't re-lock if we're within the grace period after successful auth
+        // This prevents the Face ID dismiss → app active race condition
+        if let lastAuth = lastSuccessfulAuthTime,
+           Date().timeIntervalSince(lastAuth) < authGracePeriod {
+            AppLogger.auth.debug("Skipping re-lock: within auth grace period")
+            return
+        }
+
+        // Only lock if we've been in background long enough (based on timeout setting)
+        if shouldRequireReauthentication() {
+            AppLogger.auth.info("Re-locking app: background timeout exceeded")
             isAuthenticated = false
         }
+
+        // Clear background date after checking
+        backgroundDate = nil
     }
 
     /// Called when the app enters background

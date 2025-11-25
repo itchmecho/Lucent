@@ -19,6 +19,7 @@ struct AuthenticationView: View {
     @State private var showPasscodeView = false
     @State private var authenticationError: String?
     @State private var isAuthenticating = false
+    @State private var hasAttemptedAutoAuth = false
 
     // MARK: - Body
 
@@ -57,7 +58,9 @@ struct AuthenticationView: View {
         }
         .onAppear {
             // Attempt biometric authentication automatically if available
-            if biometricAuthManager.isBiometricAvailable && !showPasscodeView {
+            // Only attempt once per view appearance to prevent loops
+            if biometricAuthManager.isBiometricAvailable && !showPasscodeView && !hasAttemptedAutoAuth {
+                hasAttemptedAutoAuth = true
                 Task {
                     await attemptBiometricAuthentication()
                 }
@@ -215,31 +218,31 @@ struct AuthenticationView: View {
         isAuthenticating = true
         authenticationError = nil
 
-        let result = await biometricAuthManager.authenticateWithFallback(
-            reason: "Unlock Lucent to access your photos"
-        )
+        // Use AppLockManager's authenticate method to ensure proper state management
+        // This prevents race conditions with app lifecycle events
+        let success = await appLockManager.authenticate(reason: "Unlock Lucent to access your photos")
 
         isAuthenticating = false
 
-        switch result {
-        case .success:
-            handleAuthenticationSuccess()
-        case .failure(let error):
-            switch error {
-            case .userCancelled, .systemCancelled:
-                authenticationError = nil
-            case .biometricNotAvailable, .biometricNotEnrolled:
-                showPasscodeView = true
-            default:
-                authenticationError = error.localizedDescription
+        if success {
+            // AppLockManager already sets isAuthenticated = true
+            // Just animate the transition
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                // State is already updated, this just ensures animation
             }
+        } else {
+            // Check if biometrics failed due to user cancel or system issues
+            if !biometricAuthManager.isBiometricAvailable {
+                showPasscodeView = true
+            }
+            // Note: AppLockManager handles rate limiting and lockout internally
         }
     }
 
     private func handleAuthenticationSuccess() {
-        // Animate the success
+        // Animate the success and use AppLockManager to ensure grace period is set
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            appLockManager.isAuthenticated = true
+            appLockManager.markAuthenticationSuccessful()
         }
     }
 }

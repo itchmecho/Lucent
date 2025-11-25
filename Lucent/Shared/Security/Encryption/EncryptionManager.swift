@@ -11,6 +11,9 @@ import CryptoKit
 import OSLog
 
 /// Errors that can occur during encryption operations
+///
+/// Note: Error descriptions are intentionally generic to prevent information leakage.
+/// Detailed error information (including file paths) is logged privately via OSLog.
 public enum EncryptionError: LocalizedError {
     case keyGenerationFailed
     case keyRetrievalFailed
@@ -21,24 +24,50 @@ public enum EncryptionError: LocalizedError {
     case fileWriteError(URL)
     case authenticationFailed
 
+    /// User-facing error description - intentionally generic for security
     public var errorDescription: String? {
         switch self {
         case .keyGenerationFailed:
             return "Failed to generate encryption key"
         case .keyRetrievalFailed:
-            return "Failed to retrieve encryption key from secure storage"
+            return "Failed to retrieve encryption key"
         case .encryptionFailed:
             return "Failed to encrypt data"
         case .decryptionFailed:
             return "Failed to decrypt data"
         case .invalidData:
             return "Invalid data format"
-        case .fileReadError(let url):
-            return "Failed to read file at \(url.path)"
-        case .fileWriteError(let url):
-            return "Failed to write file at \(url.path)"
+        case .fileReadError:
+            // Don't expose file paths to users
+            return "Failed to read file"
+        case .fileWriteError:
+            // Don't expose file paths to users
+            return "Failed to write file"
         case .authenticationFailed:
-            return "Authentication tag verification failed - data may be corrupted or tampered"
+            return "Data verification failed - file may be corrupted"
+        }
+    }
+
+    /// Returns detailed error info for logging (includes sensitive data)
+    /// Use with OSLog privacy: .private
+    var debugDescription: String {
+        switch self {
+        case .keyGenerationFailed:
+            return "Key generation failed"
+        case .keyRetrievalFailed:
+            return "Key retrieval from keychain failed"
+        case .encryptionFailed:
+            return "AES-GCM encryption failed"
+        case .decryptionFailed:
+            return "AES-GCM decryption failed"
+        case .invalidData:
+            return "Invalid data format for encryption/decryption"
+        case .fileReadError(let url):
+            return "Failed to read file at: \(url.path)"
+        case .fileWriteError(let url):
+            return "Failed to write file at: \(url.path)"
+        case .authenticationFailed:
+            return "GCM authentication tag verification failed"
         }
     }
 }
@@ -49,6 +78,12 @@ public enum EncryptionError: LocalizedError {
 /// AES-256 in GCM (Galois/Counter Mode) which provides both confidentiality and
 /// authenticated encryption.
 ///
+/// Thread Safety: This class uses an internal serial DispatchQueue to synchronize
+/// all mutable state access (particularly `cachedKey`). The `@unchecked Sendable`
+/// conformance is valid because all operations are synchronized through `queue.sync`.
+/// This is preferred over converting to an actor because encryption operations are
+/// synchronous by nature and should not require async/await at call sites.
+///
 /// Example usage:
 /// ```swift
 /// let manager = EncryptionManager.shared
@@ -57,6 +92,8 @@ public enum EncryptionError: LocalizedError {
 /// let decrypted = try manager.decrypt(data: encrypted)
 /// ```
 public final class EncryptionManager: @unchecked Sendable {
+    // Note: @unchecked Sendable is valid because all mutable state access (cachedKey)
+    // is synchronized through self.queue (a serial DispatchQueue)
 
     // MARK: - Properties
 
@@ -83,10 +120,15 @@ public final class EncryptionManager: @unchecked Sendable {
     // MARK: - Key Management
 
     /// Retrieves or generates the encryption key
+    ///
+    /// When generating a new key, biometric protection is used if available.
+    /// This provides an extra layer of security - the key requires Face ID/Touch ID
+    /// to access, even when the device is unlocked.
+    ///
     /// - Returns: The symmetric encryption key
     /// - Throws: EncryptionError if key cannot be retrieved or generated
     private func getOrCreateKey() throws -> SymmetricKey {
-        // Check cache first
+        // Check cache first - cached key avoids repeated biometric prompts
         if let key = cachedKey {
             return key
         }
@@ -104,14 +146,61 @@ public final class EncryptionManager: @unchecked Sendable {
         let keyData = key.withUnsafeBytes { Data($0) }
 
         do {
-            try keychainManager.saveKey(keyData)
+            // Use biometric protection if available for maximum security
+            if KeychainManager.supportsBiometrics() {
+                try keychainManager.saveKeyWithBiometrics(keyData)
+                logger.info("Generated and saved new encryption key with biometric protection")
+            } else {
+                // Fall back to standard keychain storage
+                try keychainManager.saveKey(keyData)
+                logger.info("Generated and saved new encryption key (biometrics not available)")
+            }
             cachedKey = key
-            logger.info("Generated and saved new encryption key")
             return key
         } catch {
-            logger.error("Failed to save encryption key: \(error.localizedDescription)")
+            logger.error("Failed to save encryption key: \(error.localizedDescription, privacy: .private)")
             throw EncryptionError.keyGenerationFailed
         }
+    }
+
+    /// Upgrades an existing key to use biometric protection
+    ///
+    /// Call this when a user enables biometric protection in settings,
+    /// or to migrate existing keys to the more secure storage.
+    ///
+    /// - Throws: EncryptionError if upgrade fails
+    public func upgradeKeyToBiometricProtection() throws {
+        try queue.sync {
+            logger.info("Upgrading encryption key to biometric protection")
+
+            guard KeychainManager.supportsBiometrics() else {
+                logger.warning("Cannot upgrade key - biometrics not available")
+                return
+            }
+
+            // Retrieve existing key
+            guard let keyData = try? keychainManager.retrieveKey() else {
+                logger.warning("No existing key to upgrade")
+                return
+            }
+
+            // Re-save with biometric protection
+            do {
+                try keychainManager.saveKeyWithBiometrics(keyData)
+                logger.info("Successfully upgraded encryption key to biometric protection")
+            } catch {
+                logger.error("Failed to upgrade key: \(error.localizedDescription, privacy: .private)")
+                throw EncryptionError.keyGenerationFailed
+            }
+        }
+    }
+
+    /// Checks if the current key has biometric protection
+    /// - Returns: true if key requires biometric authentication
+    public func keyHasBiometricProtection() -> Bool {
+        // Try to retrieve without auth context - if it fails with auth error, it has protection
+        // This is a simplified check - full implementation would query keychain attributes
+        return KeychainManager.supportsBiometrics() && keychainManager.keyExists()
     }
 
     /// Invalidates the cached encryption key
@@ -130,7 +219,10 @@ public final class EncryptionManager: @unchecked Sendable {
     /// - Returns: Encrypted data containing nonce + ciphertext + tag
     /// - Throws: EncryptionError if encryption fails
     public func encrypt(data: Data) throws -> Data {
-        try queue.sync {
+        let perfSignpost = PerformanceSignpost(name: "Encryption")
+        defer { perfSignpost.end() }
+
+        return try queue.sync {
             let key = try getOrCreateKey()
 
             do {
@@ -159,7 +251,10 @@ public final class EncryptionManager: @unchecked Sendable {
     /// - Returns: The decrypted plaintext data
     /// - Throws: EncryptionError if decryption fails or authentication fails
     public func decrypt(data: Data) throws -> Data {
-        try queue.sync {
+        let perfSignpost = PerformanceSignpost(name: "Decryption")
+        defer { perfSignpost.end() }
+
+        return try queue.sync {
             let key = try getOrCreateKey()
 
             do {

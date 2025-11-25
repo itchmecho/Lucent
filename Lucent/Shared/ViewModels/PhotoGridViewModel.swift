@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import os.log
+import Combine
 
 /// View model for managing the photo grid state and operations
 @MainActor
@@ -71,6 +72,7 @@ class PhotoGridViewModel: ObservableObject {
 
     private let storage = SecurePhotoStorage.shared
     private let thumbnailManager = ThumbnailManager.shared
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Filter Types
 
@@ -84,9 +86,40 @@ class PhotoGridViewModel: ObservableObject {
     // MARK: - Initialization
 
     init() {
+        setupMemoryWarningObserver()
         Task {
             await loadPhotos()
         }
+    }
+
+    // MARK: - Memory Management
+
+    /// Sets up observer for memory warning notifications
+    private func setupMemoryWarningObserver() {
+        #if os(iOS)
+        NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.handleMemoryWarning()
+            }
+            .store(in: &cancellables)
+        #endif
+    }
+
+    /// Handles low memory warnings by clearing caches
+    private func handleMemoryWarning() {
+        AppLogger.storage.warning("Memory warning received - clearing thumbnail caches")
+
+        // Clear loaded thumbnails from memory
+        let thumbnailCount = thumbnails.count
+        thumbnails.removeAll()
+
+        // Clear thumbnail manager's in-memory cache
+        Task {
+            await thumbnailManager.clearCache()
+        }
+
+        AppLogger.storage.info("Cleared \(thumbnailCount) thumbnails from memory due to memory pressure")
     }
 
     // MARK: - Public Methods
@@ -197,6 +230,41 @@ class PhotoGridViewModel: ObservableObject {
     /// Refreshes the photo grid
     func refresh() async {
         await loadPhotos()
+    }
+
+    /// Regenerates thumbnail for a specific photo
+    func regenerateThumbnail(for photo: EncryptedPhoto) async {
+        loadingPhotos.insert(photo.id)
+
+        do {
+            let updatedPhoto = try await storage.regenerateThumbnail(for: photo.id)
+
+            // Update local state
+            if let index = photos.firstIndex(where: { $0.id == photo.id }) {
+                photos[index] = updatedPhoto
+            }
+
+            // Load the new thumbnail
+            if let thumbnailURL = updatedPhoto.thumbnailURL {
+                let encryptedData = try Data(contentsOf: thumbnailURL)
+                let decryptedData = try EncryptionManager.shared.decrypt(data: encryptedData)
+
+                if let image = PlatformImage.from(data: decryptedData) {
+                    thumbnails[photo.id] = image
+                }
+            }
+
+            filterPhotos()
+        } catch {
+            AppLogger.storage.error("Failed to regenerate thumbnail for \(photo.id): \(error.localizedDescription, privacy: .public)")
+        }
+
+        loadingPhotos.remove(photo.id)
+    }
+
+    /// Number of photos needing thumbnail regeneration
+    func photosNeedingThumbnails() -> Int {
+        return photos.filter { !$0.hasThumbnail || $0.thumbnailGenerationFailed }.count
     }
 
     // MARK: - Private Methods

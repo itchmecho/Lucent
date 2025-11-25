@@ -12,6 +12,7 @@ import LocalAuthentication
 import OSLog
 
 /// Errors that can occur during keychain operations
+/// Note: Error descriptions are sanitized to prevent information leakage
 public enum KeychainError: LocalizedError {
     case saveFailed(OSStatus)
     case retrievalFailed(OSStatus)
@@ -21,22 +22,46 @@ public enum KeychainError: LocalizedError {
     case biometricAuthFailed
     case secureEnclaveNotAvailable
 
+    /// User-facing error description - intentionally generic for security
     public var errorDescription: String? {
         switch self {
-        case .saveFailed(let status):
-            return "Failed to save to keychain with status: \(status)"
-        case .retrievalFailed(let status):
-            return "Failed to retrieve from keychain with status: \(status)"
-        case .deletionFailed(let status):
-            return "Failed to delete from keychain with status: \(status)"
+        case .saveFailed:
+            // Don't expose OSStatus codes to users
+            return "Failed to save secure data"
+        case .retrievalFailed:
+            // Don't expose OSStatus codes to users
+            return "Failed to retrieve secure data"
+        case .deletionFailed:
+            // Don't expose OSStatus codes to users
+            return "Failed to delete secure data"
         case .notFound:
-            return "Item not found in keychain"
+            return "Secure data not found"
         case .invalidData:
-            return "Invalid data retrieved from keychain"
+            return "Invalid secure data"
         case .biometricAuthFailed:
-            return "Biometric authentication failed"
+            return "Biometric authentication required"
         case .secureEnclaveNotAvailable:
-            return "Secure Enclave is not available on this device"
+            return "Secure storage not available"
+        }
+    }
+
+    /// Detailed error info for logging (use with privacy: .private)
+    var debugDescription: String {
+        switch self {
+        case .saveFailed(let status):
+            return "Keychain save failed with OSStatus: \(status)"
+        case .retrievalFailed(let status):
+            return "Keychain retrieval failed with OSStatus: \(status)"
+        case .deletionFailed(let status):
+            return "Keychain deletion failed with OSStatus: \(status)"
+        case .notFound:
+            return "Keychain item not found (errSecItemNotFound)"
+        case .invalidData:
+            return "Keychain returned invalid data type"
+        case .biometricAuthFailed:
+            return "SecAccessControl creation with biometry flag failed"
+        case .secureEnclaveNotAvailable:
+            return "Secure Enclave not available on this device/simulator"
         }
     }
 }
@@ -48,6 +73,12 @@ public enum KeychainError: LocalizedError {
 /// - Biometric authentication protection
 /// - Maximum security access controls
 ///
+/// Thread Safety: This class uses an internal serial DispatchQueue to synchronize
+/// all mutable state access. The `@unchecked Sendable` conformance is valid because
+/// all operations are synchronized through `queue.sync`. This is preferred over
+/// converting to an actor because keychain operations are blocking and should not
+/// require async/await at call sites.
+///
 /// Example usage:
 /// ```swift
 /// let manager = KeychainManager.shared
@@ -57,6 +88,8 @@ public enum KeychainError: LocalizedError {
 /// let retrieved = try manager.retrieveKey()
 /// ```
 public final class KeychainManager: @unchecked Sendable {
+    // Note: @unchecked Sendable is valid because all mutable state access is
+    // synchronized through self.queue (a serial DispatchQueue)
 
     // MARK: - Properties
 

@@ -2,9 +2,11 @@
 
 > **Lucent - Photo Vault: A secure photo storage app with a beautiful liquid glass aesthetic**
 
-## Current Phase: Phase 5 - Cross-Platform Support
+## Current Phase: Phase 6 - Advanced Features (Mostly Complete)
 
 > **Security Hardening Complete (2025-11-24)**: All critical and high priority security fixes from GitHub Issue #17 are complete. App is beta-ready! ✅
+>
+> **Phase 6 Progress (2025-11-24)**: Privacy protection (app preview blur, screenshot detection) and backup/restore functionality complete!
 
 ---
 
@@ -167,13 +169,35 @@
 
 ## Phase 6: Advanced Features
 
-- [ ] Implement screenshot detection and warning
-- [ ] Add screenshot blocking in sensitive areas
-- [ ] Create secure app preview (blur when multitasking)
-- [ ] Implement auto-lock timer settings
+- [x] Implement screenshot detection and warning
+- [x] Add screenshot blocking in sensitive areas
+- [x] Create secure app preview (blur when multitasking)
+- [x] Implement auto-lock timer settings (already existed in AppLockManager)
 - [ ] Add decoy password feature (optional)
-- [ ] Create secure backup/restore functionality
+- [x] Create secure backup/restore functionality
 - [ ] Implement app self-destruct option (emergency wipe)
+
+### Phase 6 Completion Notes (2025-11-24)
+- ✅ **PrivacyProtectionManager.swift**: New manager for privacy features
+  - App preview blur when multitasking (hides content in app switcher)
+  - Screenshot detection with warning alert
+  - UIWindow overlay for bulletproof privacy screen
+  - Configurable via Settings
+- ✅ **BackupManager.swift**: Complete backup/restore system
+  - Password-protected encrypted backups using HKDF key derivation
+  - Custom `.lucent` file format with manifest
+  - Progress tracking during backup/restore
+  - Portable between devices (re-encrypts with device key on restore)
+- ✅ **BackupView.swift & BackupViewModel.swift**: Full UI for backup operations
+  - Create backup with password protection
+  - Restore from backup file picker
+  - Progress indicators and error handling
+- ✅ **Settings Integration**: Privacy Protection section added
+  - Toggle for app preview blur
+  - Toggle for screenshot detection
+  - Link to Backup & Restore view
+- 📝 **Files Created**: 4 new files (~1,500 lines)
+- 📝 **Remaining**: Decoy password, self-destruct (optional features)
 
 ---
 

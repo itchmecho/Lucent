@@ -28,6 +28,9 @@ struct EncryptedPhoto: Identifiable, Sendable {
     /// Whether a thumbnail exists for this photo
     private(set) var hasThumbnail: Bool
 
+    /// Whether thumbnail generation failed (can be retried)
+    private(set) var thumbnailGenerationFailed: Bool
+
     /// Metadata associated with the photo
     var metadata: PhotoMetadata
 
@@ -39,11 +42,13 @@ struct EncryptedPhoto: Identifiable, Sendable {
     init(
         id: UUID = UUID(),
         hasThumbnail: Bool = false,
+        thumbnailGenerationFailed: Bool = false,
         metadata: PhotoMetadata,
         dateAdded: Date = Date()
     ) {
         self.id = id
         self.hasThumbnail = hasThumbnail
+        self.thumbnailGenerationFailed = thumbnailGenerationFailed
         self.metadata = metadata
         self.dateAdded = dateAdded
     }
@@ -53,6 +58,11 @@ struct EncryptedPhoto: Identifiable, Sendable {
     /// Updates thumbnail availability status
     mutating func setHasThumbnail(_ has: Bool) {
         self.hasThumbnail = has
+    }
+
+    /// Updates thumbnail generation failed status
+    mutating func setThumbnailGenerationFailed(_ failed: Bool) {
+        self.thumbnailGenerationFailed = failed
     }
 
     // MARK: - Computed Properties
@@ -99,6 +109,7 @@ extension EncryptedPhoto: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case hasThumbnail
+        case thumbnailGenerationFailed
         case metadata
         case dateAdded
     }
@@ -107,6 +118,7 @@ extension EncryptedPhoto: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(UUID.self, forKey: .id)
         self.hasThumbnail = try container.decodeIfPresent(Bool.self, forKey: .hasThumbnail) ?? false
+        self.thumbnailGenerationFailed = try container.decodeIfPresent(Bool.self, forKey: .thumbnailGenerationFailed) ?? false
         self.metadata = try container.decode(PhotoMetadata.self, forKey: .metadata)
         self.dateAdded = try container.decode(Date.self, forKey: .dateAdded)
     }
@@ -115,6 +127,7 @@ extension EncryptedPhoto: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(hasThumbnail, forKey: .hasThumbnail)
+        try container.encode(thumbnailGenerationFailed, forKey: .thumbnailGenerationFailed)
         try container.encode(metadata, forKey: .metadata)
         try container.encode(dateAdded, forKey: .dateAdded)
     }

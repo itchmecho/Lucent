@@ -16,9 +16,9 @@ struct PhotoDetailView: View {
     let allPhotos: [EncryptedPhoto]
     let onDismiss: () -> Void
 
-    @State private var currentPhoto: EncryptedPhoto
-    @State private var currentImage: PlatformImage?
-    @State private var isLoadingImage = false
+    @State private var currentIndex: Int
+    @State private var imageCache: [UUID: SecureImage] = [:]
+    @State private var loadingImages: Set<UUID> = []
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
@@ -26,6 +26,14 @@ struct PhotoDetailView: View {
     @State private var showingControls = true
     @State private var showingMetadata = false
     @State private var controlsTimer: Timer?
+
+    // Dismiss gesture state
+    @State private var dismissOffset: CGSize = .zero
+    @State private var dismissOpacity: Double = 1.0
+    @State private var isDraggingToDismiss = false
+
+    // Entrance animation
+    @State private var hasAppeared = false
 
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 4.0
@@ -36,26 +44,36 @@ struct PhotoDetailView: View {
         self.photo = photo
         self.allPhotos = allPhotos
         self.onDismiss = onDismiss
-        _currentPhoto = State(initialValue: photo)
+        _currentIndex = State(initialValue: allPhotos.firstIndex(where: { $0.id == photo.id }) ?? 0)
+    }
+
+    private var currentPhoto: EncryptedPhoto {
+        guard currentIndex >= 0 && currentIndex < allPhotos.count else {
+            return photo
+        }
+        return allPhotos[currentIndex]
     }
 
     // MARK: - Body
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            // Background - fades with dismiss gesture
+            Color.black
+                .opacity(dismissOpacity)
+                .ignoresSafeArea()
 
-            if isLoadingImage {
-                loadingView
-            } else if let image = currentImage {
-                imageView(image)
-            } else {
-                placeholderView
-            }
+            // Photo gallery with TabView for smooth paging
+            galleryTabView
+                .offset(dismissOffset)
+                .scaleEffect(dismissOpacity < 1 ? 0.9 + (dismissOpacity * 0.1) : 1.0)
+                .opacity(hasAppeared ? 1 : 0)
+                .scaleEffect(hasAppeared ? 1 : 0.8)
 
             // Controls overlay
-            if showingControls {
+            if showingControls && !isDraggingToDismiss {
                 controlsOverlay
+                    .opacity(dismissOpacity)
             }
         }
         #if canImport(UIKit)
@@ -67,73 +85,64 @@ struct PhotoDetailView: View {
             }
             resetControlsTimer()
         }
+        .gesture(dismissDragGesture)
         .task {
-            await loadCurrentImage()
+            // Entrance animation
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                hasAppeared = true
+            }
+            await loadImageForCurrentPhoto()
             resetControlsTimer()
         }
-        .onChange(of: currentPhoto) { _, _ in
+        .onChange(of: currentIndex) { _, _ in
             Task {
-                await loadCurrentImage()
+                await loadImageForCurrentPhoto()
             }
+            resetZoom()
         }
         .sheet(isPresented: $showingMetadata) {
             PhotoMetadataView(photo: currentPhoto)
         }
         .onDisappear {
-            // Clear image from memory for security
-            currentImage = nil
+            // Securely wipe all cached images from memory
+            for (_, image) in imageCache {
+                image.wipe()
+            }
+            imageCache.removeAll()
             controlsTimer?.invalidate()
         }
-        .gesture(
-            magnificationGesture
-                .simultaneously(with: dragGesture)
-        )
+    }
+
+    // MARK: - Gallery TabView
+
+    private var galleryTabView: some View {
+        TabView(selection: $currentIndex) {
+            ForEach(Array(allPhotos.enumerated()), id: \.element.id) { index, galleryPhoto in
+                ZoomablePhotoView(
+                    photo: galleryPhoto,
+                    image: imageCache[galleryPhoto.id],
+                    isLoading: loadingImages.contains(galleryPhoto.id),
+                    scale: index == currentIndex ? $scale : .constant(1.0),
+                    lastScale: index == currentIndex ? $lastScale : .constant(1.0),
+                    offset: index == currentIndex ? $offset : .constant(.zero),
+                    lastOffset: index == currentIndex ? $lastOffset : .constant(.zero),
+                    minScale: minScale,
+                    maxScale: maxScale,
+                    onControlsToggle: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showingControls.toggle()
+                        }
+                        resetControlsTimer()
+                    }
+                )
+                .tag(index)
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: currentIndex)
     }
 
     // MARK: - View Components
-
-    private var loadingView: some View {
-        VStack(spacing: 16) {
-            ProgressView()
-                .scaleEffect(1.5)
-                .tint(.white)
-            Text("Loading photo...")
-                .foregroundStyle(.white)
-        }
-    }
-
-    private var placeholderView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "photo")
-                .font(.system(size: 64))
-                .foregroundStyle(.white.opacity(0.5))
-            Text("Unable to load photo")
-                .foregroundStyle(.white)
-        }
-    }
-
-    @ViewBuilder
-    private func imageView(_ image: PlatformImage) -> some View {
-        GeometryReader { geometry in
-            #if canImport(UIKit)
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .scaleEffect(scale)
-                .offset(offset)
-                .gesture(doubleTapGesture(in: geometry))
-            #elseif canImport(AppKit)
-            Image(nsImage: image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .scaleEffect(scale)
-                .offset(offset)
-                .gesture(doubleTapGesture(in: geometry))
-            #endif
-        }
-    }
 
     private var controlsOverlay: some View {
         VStack {
@@ -199,7 +208,7 @@ struct PhotoDetailView: View {
                 .opacity(canNavigatePrevious ? 1 : 0.3)
 
                 // Photo counter
-                Text("\(currentPhotoIndex + 1) of \(allPhotos.count)")
+                Text("\(currentIndex + 1) of \(allPhotos.count)")
                     .font(.subheadline)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
@@ -226,143 +235,145 @@ struct PhotoDetailView: View {
         .transition(.opacity)
     }
 
-    // MARK: - Gestures
+    // MARK: - Dismiss Gesture
 
-    private var magnificationGesture: some Gesture {
-        MagnificationGesture()
-            .onChanged { value in
-                let delta = value / lastScale
-                lastScale = value
-                let newScale = scale * delta
-
-                // Clamp scale
-                scale = min(max(newScale, minScale), maxScale)
-
-                // Reset offset when zooming out to 1.0
-                if scale <= minScale {
-                    offset = .zero
-                    lastOffset = .zero
-                }
-
-                resetControlsTimer()
-            }
-            .onEnded { _ in
-                lastScale = 1.0
-
-                // Snap to min or current scale
-                withAnimation(.spring(response: 0.3)) {
-                    if scale < minScale * 1.1 {
-                        scale = minScale
-                        offset = .zero
-                        lastOffset = .zero
-                    }
-                }
-            }
-    }
-
-    private var dragGesture: some Gesture {
+    private var dismissDragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                // Only allow drag when zoomed in
-                if scale > 1.0 {
-                    offset = CGSize(
-                        width: lastOffset.width + value.translation.width,
-                        height: lastOffset.height + value.translation.height
-                    )
-                }
-                resetControlsTimer()
+                // Only allow vertical dismiss when not zoomed
+                guard scale <= 1.0 else { return }
+
+                // Check if this is primarily a vertical drag
+                let isVerticalDrag = abs(value.translation.height) > abs(value.translation.width)
+                guard isVerticalDrag else { return }
+
+                isDraggingToDismiss = true
+                dismissOffset = CGSize(width: 0, height: value.translation.height)
+
+                // Calculate opacity based on drag distance
+                let progress = min(abs(value.translation.height) / 300, 1.0)
+                dismissOpacity = 1.0 - (progress * 0.5)
             }
             .onEnded { value in
-                lastOffset = offset
+                let velocity = value.predictedEndTranslation.height - value.translation.height
+                let shouldDismiss = abs(value.translation.height) > 150 || abs(velocity) > 500
 
-                // Swipe to navigate when not zoomed
-                if scale <= 1.0 {
-                    let swipeThreshold: CGFloat = 50
-                    if value.translation.width < -swipeThreshold {
-                        navigateToNext()
-                    } else if value.translation.width > swipeThreshold {
-                        navigateToPrevious()
+                if shouldDismiss {
+                    // Animate out and dismiss
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        dismissOffset = CGSize(width: 0, height: value.translation.height > 0 ? 500 : -500)
+                        dismissOpacity = 0
+                    }
+                    // Delay dismiss to allow animation
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        onDismiss()
+                    }
+                } else {
+                    // Spring back
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                        dismissOffset = .zero
+                        dismissOpacity = 1.0
+                        isDraggingToDismiss = false
                     }
                 }
-            }
-    }
-
-    private func doubleTapGesture(in geometry: GeometryProxy) -> some Gesture {
-        TapGesture(count: 2)
-            .onEnded { _ in
-                withAnimation(.spring(response: 0.3)) {
-                    if scale > 1.0 {
-                        // Zoom out
-                        scale = 1.0
-                        offset = .zero
-                        lastOffset = .zero
-                    } else {
-                        // Zoom in to 2x
-                        scale = 2.0
-                    }
-                }
-                resetControlsTimer()
             }
     }
 
     // MARK: - Navigation
 
-    private var currentPhotoIndex: Int {
-        allPhotos.firstIndex(where: { $0.id == currentPhoto.id }) ?? 0
-    }
-
     private var canNavigatePrevious: Bool {
-        currentPhotoIndex > 0
+        currentIndex > 0
     }
 
     private var canNavigateNext: Bool {
-        currentPhotoIndex < allPhotos.count - 1
+        currentIndex < allPhotos.count - 1
     }
 
     private func navigateToPrevious() {
         guard canNavigatePrevious else { return }
-        withAnimation {
-            currentPhoto = allPhotos[currentPhotoIndex - 1]
-            resetZoom()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            currentIndex -= 1
         }
     }
 
     private func navigateToNext() {
         guard canNavigateNext else { return }
-        withAnimation {
-            currentPhoto = allPhotos[currentPhotoIndex + 1]
-            resetZoom()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            currentIndex += 1
         }
     }
 
     private func resetZoom() {
-        scale = 1.0
-        lastScale = 1.0
-        offset = .zero
-        lastOffset = .zero
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            scale = 1.0
+            lastScale = 1.0
+            offset = .zero
+            lastOffset = .zero
+        }
     }
 
     // MARK: - Image Loading
 
-    private func loadCurrentImage() async {
-        isLoadingImage = true
-        currentImage = nil
+    private func loadImageForCurrentPhoto() async {
+        let photoToLoad = currentPhoto
+
+        // Skip if already loaded or loading
+        guard imageCache[photoToLoad.id] == nil && !loadingImages.contains(photoToLoad.id) else {
+            return
+        }
+
+        loadingImages.insert(photoToLoad.id)
 
         do {
-            // Load and decrypt the full photo
-            let photoData = try await SecurePhotoStorage.shared.retrievePhoto(id: currentPhoto.id)
+            var photoData = try await SecurePhotoStorage.shared.retrievePhoto(id: photoToLoad.id)
 
-            // Create platform image
-            if let image = PlatformImage.from(data: photoData) {
+            if let secureImage = SecureImage(data: photoData) {
                 await MainActor.run {
-                    currentImage = image
+                    imageCache[photoToLoad.id] = secureImage
                 }
             }
+
+            photoData.secureWipe()
         } catch {
             AppLogger.storage.error("Failed to load photo: \(error.localizedDescription, privacy: .public)")
         }
 
-        isLoadingImage = false
+        loadingImages.remove(photoToLoad.id)
+
+        // Preload adjacent photos for smooth swiping
+        await preloadAdjacentPhotos()
+    }
+
+    private func preloadAdjacentPhotos() async {
+        // Preload previous
+        if currentIndex > 0 {
+            let prevPhoto = allPhotos[currentIndex - 1]
+            if imageCache[prevPhoto.id] == nil && !loadingImages.contains(prevPhoto.id) {
+                loadingImages.insert(prevPhoto.id)
+                if let data = try? await SecurePhotoStorage.shared.retrievePhoto(id: prevPhoto.id),
+                   let image = SecureImage(data: data) {
+                    await MainActor.run {
+                        imageCache[prevPhoto.id] = image
+                    }
+                }
+                loadingImages.remove(prevPhoto.id)
+            }
+        }
+
+        // Preload next
+        if currentIndex < allPhotos.count - 1 {
+            let nextPhoto = allPhotos[currentIndex + 1]
+            if imageCache[nextPhoto.id] == nil && !loadingImages.contains(nextPhoto.id) {
+                loadingImages.insert(nextPhoto.id)
+                if let data = try? await SecurePhotoStorage.shared.retrievePhoto(id: nextPhoto.id),
+                   let image = SecureImage(data: data) {
+                    await MainActor.run {
+                        imageCache[nextPhoto.id] = image
+                    }
+                }
+                loadingImages.remove(nextPhoto.id)
+            }
+        }
     }
 
     // MARK: - Controls Timer
@@ -378,6 +389,142 @@ struct PhotoDetailView: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Zoomable Photo View
+
+/// Individual photo view with pinch-to-zoom and double-tap zoom
+struct ZoomablePhotoView: View {
+    let photo: EncryptedPhoto
+    let image: SecureImage?
+    let isLoading: Bool
+    @Binding var scale: CGFloat
+    @Binding var lastScale: CGFloat
+    @Binding var offset: CGSize
+    @Binding var lastOffset: CGSize
+    let minScale: CGFloat
+    let maxScale: CGFloat
+    let onControlsToggle: () -> Void
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                if isLoading {
+                    loadingView
+                } else if let secureImage = image, let platformImage = secureImage.getImage() {
+                    imageContent(platformImage, geometry: geometry)
+                } else {
+                    placeholderView
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+        }
+    }
+
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .scaleEffect(1.5)
+                .tint(.white)
+            Text("Loading...")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.7))
+        }
+    }
+
+    private var placeholderView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "photo")
+                .font(.system(size: 64))
+                .foregroundStyle(.white.opacity(0.3))
+            Text("Unable to load photo")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.5))
+        }
+    }
+
+    @ViewBuilder
+    private func imageContent(_ platformImage: PlatformImage, geometry: GeometryProxy) -> some View {
+        #if canImport(UIKit)
+        Image(uiImage: platformImage)
+            .resizable()
+            .scaledToFit()
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .scaleEffect(scale)
+            .offset(offset)
+            .gesture(magnificationGesture)
+            .gesture(dragGesture)
+            .gesture(doubleTapGesture)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scale)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: offset)
+        #elseif canImport(AppKit)
+        Image(nsImage: platformImage)
+            .resizable()
+            .scaledToFit()
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .scaleEffect(scale)
+            .offset(offset)
+            .gesture(magnificationGesture)
+            .gesture(dragGesture)
+            .gesture(doubleTapGesture)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scale)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: offset)
+        #endif
+    }
+
+    // MARK: - Gestures
+
+    private var magnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { value in
+                let delta = value / lastScale
+                lastScale = value
+                let newScale = scale * delta
+                scale = min(max(newScale, minScale), maxScale)
+
+                if scale <= minScale {
+                    offset = .zero
+                    lastOffset = .zero
+                }
+            }
+            .onEnded { _ in
+                lastScale = 1.0
+                if scale < minScale * 1.1 {
+                    scale = minScale
+                    offset = .zero
+                    lastOffset = .zero
+                }
+            }
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if scale > 1.0 {
+                    offset = CGSize(
+                        width: lastOffset.width + value.translation.width,
+                        height: lastOffset.height + value.translation.height
+                    )
+                }
+            }
+            .onEnded { _ in
+                lastOffset = offset
+            }
+    }
+
+    private var doubleTapGesture: some Gesture {
+        TapGesture(count: 2)
+            .onEnded {
+                if scale > 1.0 {
+                    scale = 1.0
+                    offset = .zero
+                    lastOffset = .zero
+                } else {
+                    scale = 2.5
+                }
+                onControlsToggle()
+            }
     }
 }
 

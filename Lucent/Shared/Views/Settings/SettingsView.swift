@@ -37,6 +37,9 @@ struct SettingsView: View {
                         // Security Settings Section
                         securitySection
 
+                        // Privacy Protection Section
+                        privacySection
+
                         // Storage Management Section
                         storageSection
 
@@ -95,9 +98,12 @@ struct SettingsView: View {
                         icon: viewModel.biometricIcon,
                         title: viewModel.biometricTitle,
                         subtitle: "Use \(viewModel.biometricTitle) to unlock",
-                        isOn: $viewModel.biometricEnabled
+                        isOn: Binding(
+                            get: { viewModel.biometricEnabled },
+                            set: { viewModel.setBiometricEnabled($0) }
+                        )
                     )
-                    .disabled(!viewModel.isBiometricAvailable)
+                    .disabled(!viewModel.isBiometricAvailable || viewModel.isProcessingBiometric)
                     .opacity(viewModel.isBiometricAvailable ? 1.0 : 0.5)
 
                     Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
@@ -116,13 +122,69 @@ struct SettingsView: View {
                         icon: "lock.shield",
                         title: "Require on Launch",
                         subtitle: "Lock when app closes",
-                        isOn: $viewModel.requirePasscodeOnLaunch
+                        isOn: Binding(
+                            get: { viewModel.requirePasscodeOnLaunch },
+                            set: { viewModel.setRequireOnLaunch($0) }
+                        )
                     )
+
+                    // Lock Now button (only show if app lock is enabled)
+                    if viewModel.biometricEnabled {
+                        Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                        SettingsRowButton(
+                            icon: "lock.fill",
+                            title: "Lock Now",
+                            subtitle: "Immediately lock the app",
+                            tintColor: .warning,
+                            action: { viewModel.lockAppNow() }
+                        )
+                    }
                 }
             }
         }
         .sheet(isPresented: $viewModel.showAutoLockOptions) {
             autoLockSheet
+        }
+    }
+
+    // MARK: - Privacy Protection Section
+
+    private var privacySection: some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
+            GlassSectionHeader(title: "Privacy Protection")
+
+            GlassCard(padding: 0) {
+                VStack(spacing: 0) {
+                    // App preview blur toggle
+                    SettingsRowToggle(
+                        icon: "eye.slash.fill",
+                        title: "Hide in App Switcher",
+                        subtitle: "Blur content when multitasking",
+                        isOn: $viewModel.appPreviewBlurEnabled
+                    )
+
+                    Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                    // Screenshot detection toggle
+                    SettingsRowToggle(
+                        icon: "camera.viewfinder",
+                        title: "Screenshot Detection",
+                        subtitle: "Warn when screenshots are taken",
+                        isOn: $viewModel.screenshotProtectionEnabled
+                    )
+
+                    Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                    // Info about privacy features
+                    SettingsRowInfo(
+                        icon: "shield.checkered",
+                        title: "Always Protected",
+                        subtitle: "Photos remain encrypted even if screenshots are taken",
+                        tintColor: .success
+                    )
+                }
+            }
         }
     }
 
@@ -160,6 +222,40 @@ struct SettingsView: View {
                         tintColor: .warning,
                         action: { viewModel.showClearCacheConfirmation() }
                     )
+
+                    // Regenerate thumbnails button (only show if needed)
+                    if viewModel.photosNeedingThumbnails > 0 || viewModel.isRegeneratingThumbnails {
+                        Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                        if viewModel.isRegeneratingThumbnails {
+                            // Show progress
+                            HStack(spacing: DesignTokens.Spacing.md) {
+                                ProgressView()
+                                    .frame(width: DesignTokens.IconSize.xl, alignment: .center)
+
+                                VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
+                                    Text("Regenerating Thumbnails...")
+                                        .font(.body)
+                                        .foregroundColor(.textPrimary)
+
+                                    Text("\(viewModel.thumbnailRegenerationProgress.completed)/\(viewModel.thumbnailRegenerationProgress.total)")
+                                        .font(.caption)
+                                        .foregroundColor(.textSecondary)
+                                }
+
+                                Spacer()
+                            }
+                            .padding(DesignTokens.Spacing.lg)
+                        } else {
+                            SettingsRowButton(
+                                icon: "arrow.triangle.2.circlepath",
+                                title: "Regenerate Thumbnails",
+                                subtitle: "\(viewModel.photosNeedingThumbnails) photo\(viewModel.photosNeedingThumbnails == 1 ? "" : "s") need thumbnails",
+                                tintColor: .info,
+                                action: { viewModel.showRegenerateThumbnailsConfirmation() }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -200,6 +296,16 @@ struct SettingsView: View {
                         subtitle: "Display photo previews in grid",
                         isOn: $viewModel.showThumbnails
                     )
+
+                    Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                    // Grid view toggle
+                    SettingsRowToggle(
+                        icon: "square.grid.2x2.fill",
+                        title: "Grid View",
+                        subtitle: "Use grid layout with search & filters",
+                        isOn: $viewModel.useGridView
+                    )
                 }
             }
         }
@@ -216,6 +322,16 @@ struct SettingsView: View {
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
+                    // Backup & Restore button
+                    SettingsRowButton(
+                        icon: "arrow.triangle.2.circlepath.circle.fill",
+                        title: "Backup & Restore",
+                        subtitle: "Create or restore encrypted backups",
+                        action: { viewModel.showBackupView = true }
+                    )
+
+                    Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
                     // Export metadata button
                     SettingsRowButton(
                         icon: "square.and.arrow.up.fill",
@@ -230,11 +346,14 @@ struct SettingsView: View {
                     SettingsRowInfo(
                         icon: "exclamationmark.shield.fill",
                         title: "Local Storage Only",
-                        subtitle: "Photos are stored only on this device. Back up your device regularly.",
+                        subtitle: "Photos are stored only on this device. Create backups regularly.",
                         tintColor: .info
                     )
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.showBackupView) {
+            BackupView()
         }
     }
 

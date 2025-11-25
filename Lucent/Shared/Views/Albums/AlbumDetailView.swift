@@ -248,7 +248,7 @@ struct EditAlbumView: View {
         self.album = album
         _albumName = State(initialValue: album.name)
         _albumDescription = State(initialValue: album.description ?? "")
-        _selectedColor = State(initialValue: album.themeColor != nil ? Color(hex: album.themeColor!) : nil)
+        _selectedColor = State(initialValue: album.themeColor.flatMap { Color(hex: $0) })
     }
 
     var body: some View {

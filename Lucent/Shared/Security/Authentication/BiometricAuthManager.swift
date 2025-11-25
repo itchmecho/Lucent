@@ -9,6 +9,7 @@ import Foundation
 import LocalAuthentication
 
 /// Errors that can occur during biometric authentication
+/// Note: Error descriptions are sanitized to prevent information leakage
 enum AuthError: Error, LocalizedError {
     case biometricNotAvailable
     case biometricNotEnrolled
@@ -18,22 +19,44 @@ enum AuthError: Error, LocalizedError {
     case passcodeNotSet
     case unknown(Error)
 
+    /// User-facing error description - intentionally generic for security
     var errorDescription: String? {
         switch self {
         case .biometricNotAvailable:
-            return "Biometric authentication is not available on this device"
+            return "Biometric authentication is not available"
         case .biometricNotEnrolled:
-            return "No biometric authentication is enrolled. Please set up Face ID or Touch ID in Settings"
+            return "Please set up Face ID or Touch ID in Settings"
         case .authenticationFailed:
-            return "Authentication failed. Please try again"
+            return "Authentication failed"
         case .userCancelled:
             return "Authentication was cancelled"
         case .systemCancelled:
-            return "Authentication was cancelled by the system"
+            return "Authentication was interrupted"
         case .passcodeNotSet:
-            return "Device passcode is not set"
+            return "Device passcode is required"
+        case .unknown:
+            // Don't expose underlying error to users
+            return "Authentication error occurred"
+        }
+    }
+
+    /// Detailed error info for logging (use with privacy: .private)
+    var debugDescription: String {
+        switch self {
+        case .biometricNotAvailable:
+            return "LAError.biometryNotAvailable - hardware not present or disabled"
+        case .biometricNotEnrolled:
+            return "LAError.biometryNotEnrolled - no fingerprints/faces enrolled"
+        case .authenticationFailed:
+            return "LAError.authenticationFailed - biometric didn't match"
+        case .userCancelled:
+            return "LAError.userCancel - user tapped cancel"
+        case .systemCancelled:
+            return "LAError.systemCancel - system interrupted auth"
+        case .passcodeNotSet:
+            return "LAError.passcodeNotSet - device has no passcode"
         case .unknown(let error):
-            return "An unknown error occurred: \(error.localizedDescription)"
+            return "Unknown LAError: \(error.localizedDescription)"
         }
     }
 }
@@ -76,7 +99,7 @@ final class BiometricAuthManager: ObservableObject {
     @Published private(set) var biometricType: BiometricType = .none
     @Published private(set) var isBiometricAvailable: Bool = false
 
-    private let context = LAContext()
+    /// Policy for biometric-only authentication
     private let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
 
     // MARK: - Initialization
@@ -88,7 +111,10 @@ final class BiometricAuthManager: ObservableObject {
     // MARK: - Public Methods
 
     /// Checks what type of biometric authentication is available
+    /// Uses a fresh LAContext each time to get accurate availability status
     func checkBiometricAvailability() {
+        // Always create a fresh context - LAContext state can become stale after use
+        let context = LAContext()
         var error: NSError?
 
         isBiometricAvailable = context.canEvaluatePolicy(policy, error: &error)

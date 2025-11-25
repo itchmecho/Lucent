@@ -26,6 +26,7 @@ actor AlbumManager {
 
     // MARK: - Error Types
 
+    /// Album errors with sanitized user-facing messages
     enum AlbumError: Error, LocalizedError {
         case initializationFailed
         case albumNotFound
@@ -35,20 +36,44 @@ actor AlbumManager {
         case loadFailed(reason: String)
         case photoStorageError(Error)
 
+        /// User-facing error description - intentionally generic for security
         var errorDescription: String? {
             switch self {
             case .initializationFailed:
-                return "Failed to initialize album storage"
+                return "Failed to initialize albums"
             case .albumNotFound:
                 return "Album not found"
             case .invalidAlbumName:
                 return "Album name cannot be empty"
             case .systemAlbumModification:
                 return "Cannot modify system albums"
+            case .saveFailed:
+                // Don't expose internal reason to users
+                return "Failed to save album"
+            case .loadFailed:
+                // Don't expose internal reason to users
+                return "Failed to load albums"
+            case .photoStorageError:
+                // Don't expose underlying error to users
+                return "Failed to update photo"
+            }
+        }
+
+        /// Detailed error info for logging (use with privacy: .private)
+        var debugDescription: String {
+            switch self {
+            case .initializationFailed:
+                return "Album storage initialization failed"
+            case .albumNotFound:
+                return "Album ID not found in storage"
+            case .invalidAlbumName:
+                return "Invalid album name (empty or whitespace)"
+            case .systemAlbumModification:
+                return "Attempted to modify system album"
             case .saveFailed(let reason):
-                return "Failed to save albums: \(reason)"
+                return "Album save failed: \(reason)"
             case .loadFailed(let reason):
-                return "Failed to load albums: \(reason)"
+                return "Album load failed: \(reason)"
             case .photoStorageError(let error):
                 return "Photo storage error: \(error.localizedDescription)"
             }
@@ -58,8 +83,12 @@ actor AlbumManager {
     // MARK: - Initialization
 
     private init() {
-        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            fatalError("Could not access Documents directory")
+        // Compute albums URL - fall back to temp directory if Documents unavailable (should never happen)
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory())
+
+        if fileManager.urls(for: .documentDirectory, in: .userDomainMask).isEmpty {
+            AppLogger.storage.error("CRITICAL: Could not access Documents directory for AlbumManager")
         }
 
         let baseURL = documentsURL.appendingPathComponent("LucentVault", isDirectory: true)
@@ -383,6 +412,9 @@ actor AlbumManager {
         }
     }
 
+    /// File permissions: 0600 (owner read/write only)
+    private static let filePermissions: Int = 0o600
+
     private func saveAlbums() throws {
         let albumArray = Array(albums.values)
 
@@ -391,6 +423,12 @@ actor AlbumManager {
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             let data = try encoder.encode(albumArray)
             try data.write(to: albumsURL)
+
+            // Set strict file permissions on albums file
+            try fileManager.setAttributes(
+                [.posixPermissions: Self.filePermissions],
+                ofItemAtPath: albumsURL.path
+            )
         } catch {
             throw AlbumError.saveFailed(reason: error.localizedDescription)
         }

@@ -20,25 +20,35 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Published Properties
 
     // Security Settings
-    @Published var biometricEnabled: Bool = false {
-        didSet {
-            UserDefaults.standard.set(biometricEnabled, forKey: "biometricEnabled")
-        }
-    }
-    @Published var requirePasscodeOnLaunch: Bool = false {
-        didSet {
-            appLockManager.requireAuthOnLaunch = requirePasscodeOnLaunch
-        }
-    }
+    @Published var biometricEnabled: Bool = false
+
+    /// Indicates biometric verification is in progress (disables toggle)
+    @Published var isProcessingBiometric: Bool = false
+    @Published var requirePasscodeOnLaunch: Bool = false
     @Published var selectedAutoLockOption: AutoLockOption = .oneMinute
     @Published var isBiometricAvailable: Bool = false
     @Published var biometricTitle: String = "Biometrics"
     @Published var biometricIcon: String = "faceid"
 
+    // Privacy Protection Settings
+    @Published var screenshotProtectionEnabled: Bool = true {
+        didSet {
+            privacyManager.screenshotProtectionEnabled = screenshotProtectionEnabled
+        }
+    }
+    @Published var appPreviewBlurEnabled: Bool = true {
+        didSet {
+            privacyManager.appPreviewBlurEnabled = appPreviewBlurEnabled
+        }
+    }
+
     // Storage
     @Published var photoCount: Int = 0
     @Published var totalStorageBytes: Int = 0
     @Published var thumbnailCacheSize: String = "Unknown"
+    @Published var photosNeedingThumbnails: Int = 0
+    @Published var isRegeneratingThumbnails: Bool = false
+    @Published var thumbnailRegenerationProgress: (completed: Int, total: Int) = (0, 0)
 
     // Appearance
     @Published var selectedAppearanceMode: AppearanceMode = .system
@@ -52,6 +62,11 @@ final class SettingsViewModel: ObservableObject {
             UserDefaults.standard.set(showThumbnails, forKey: "showThumbnails")
         }
     }
+    @Published var useGridView: Bool = false {
+        didSet {
+            UserDefaults.standard.set(useGridView, forKey: "useGridView")
+        }
+    }
 
     // UI State
     @Published var showAlert: Bool = false
@@ -60,13 +75,16 @@ final class SettingsViewModel: ObservableObject {
     @Published var isDestructiveAlert: Bool = false
     @Published var showAutoLockOptions: Bool = false
     @Published var showAppearanceOptions: Bool = false
+    @Published var showBackupView: Bool = false
 
     // MARK: - Private Properties
 
     private let appLockManager = AppLockManager.shared
+    private let privacyManager = PrivacyProtectionManager.shared
     private let biometricAuthManager = BiometricAuthManager()
     private let passcodeManager = PasscodeManager()
     private var pendingAction: (() -> Void)?
+
 
     // MARK: - Computed Properties
 
@@ -111,10 +129,15 @@ final class SettingsViewModel: ObservableObject {
         biometricTitle = biometricAuthManager.biometricType.displayName
         biometricIcon = biometricAuthManager.biometricType.iconName
 
+        // Load privacy protection settings
+        screenshotProtectionEnabled = privacyManager.screenshotProtectionEnabled
+        appPreviewBlurEnabled = privacyManager.appPreviewBlurEnabled
+
         // Load appearance settings
         selectedAppearanceMode = AppearanceMode.current
         showPhotoCounts = UserDefaults.standard.bool(forKey: "showPhotoCounts")
         showThumbnails = UserDefaults.standard.object(forKey: "showThumbnails") as? Bool ?? true
+        useGridView = UserDefaults.standard.bool(forKey: "useGridView")
 
         // Load storage stats
         loadStorageStats()
@@ -128,18 +151,106 @@ final class SettingsViewModel: ObservableObject {
                 photoCount = stats.photoCount
                 totalStorageBytes = stats.totalSizeBytes
 
-                // Calculate thumbnail cache size (placeholder - would need actual implementation)
-                thumbnailCacheSize = "~5 MB"
+                // Count photos needing thumbnails
+                let needingThumbnails = try await SecurePhotoStorage.shared.photosNeedingThumbnails()
+                photosNeedingThumbnails = needingThumbnails.count
+
+                // Get thumbnail cache stats
+                let cacheStats = await ThumbnailManager.shared.getCacheStats()
+                thumbnailCacheSize = ByteCountFormatter.string(fromByteCount: Int64(cacheStats.sizeBytes), countStyle: .file)
             } catch {
                 AppLogger.settings.error("Failed to load storage stats: \(error.localizedDescription, privacy: .public)")
                 photoCount = 0
                 totalStorageBytes = 0
                 thumbnailCacheSize = "Unknown"
+                photosNeedingThumbnails = 0
             }
         }
     }
 
     // MARK: - Security Actions
+
+    /// Explicitly sets require on launch - called by UI toggle
+    func setRequireOnLaunch(_ enabled: Bool) {
+        guard enabled != requirePasscodeOnLaunch else { return }
+        requirePasscodeOnLaunch = enabled
+        appLockManager.requireAuthOnLaunch = enabled
+    }
+
+    /// Explicitly sets biometric enabled state - called by UI toggle
+    /// This is the proper pattern: explicit method instead of didSet side effects
+    func setBiometricEnabled(_ enabled: Bool) {
+        // Ignore if already processing or no change
+        guard !isProcessingBiometric else { return }
+        guard enabled != biometricEnabled else { return }
+
+        if enabled {
+            // User turning ON - verify with Face ID first
+            Task {
+                await verifyAndEnableBiometric()
+            }
+        } else {
+            // User turning OFF - disable immediately
+            biometricEnabled = false
+            UserDefaults.standard.set(false, forKey: "biometricEnabled")
+            appLockManager.disableAppLock()
+            AppLogger.security.info("Biometric authentication disabled")
+        }
+    }
+
+    /// Verifies Face ID and completes enabling, or reverts on failure
+    private func verifyAndEnableBiometric() async {
+        isProcessingBiometric = true
+
+        // Verify biometric is available
+        guard isBiometricAvailable else {
+            biometricEnabled = false  // Revert
+            isProcessingBiometric = false
+            alertTitle = "Biometrics Unavailable"
+            alertMessage = "\(biometricTitle) is not available on this device."
+            isDestructiveAlert = false
+            showAlert = true
+            return
+        }
+
+        // Authenticate to confirm
+        let result = await biometricAuthManager.authenticate(reason: "Verify \(biometricTitle) to enable unlock")
+
+        isProcessingBiometric = false
+
+        switch result {
+        case .success:
+            // Success - save and configure
+            UserDefaults.standard.set(true, forKey: "biometricEnabled")
+            appLockManager.enableAppLock(requireOnLaunch: true, timeout: appLockManager.lockTimeout)
+
+            // Try to upgrade encryption key
+            do {
+                try EncryptionManager.shared.upgradeKeyToBiometricProtection()
+            } catch {
+                AppLogger.security.warning("Key upgrade failed: \(error.localizedDescription, privacy: .private)")
+            }
+
+            AppLogger.security.info("\(biometricTitle) enabled successfully")
+            alertTitle = "\(biometricTitle) Enabled"
+            alertMessage = "You can now use \(biometricTitle) to unlock Lucent."
+            isDestructiveAlert = false
+            showAlert = true
+
+        case .failure(let error):
+            // Failed - revert toggle
+            biometricEnabled = false
+
+            if case .userCancelled = error {
+                // User cancelled - no alert
+            } else {
+                alertTitle = "Verification Failed"
+                alertMessage = error.localizedDescription ?? "Could not verify \(biometricTitle)"
+                isDestructiveAlert = false
+                showAlert = true
+            }
+        }
+    }
 
     /// Sets the auto-lock timeout
     func setAutoLockTimeout(_ option: AutoLockOption) {
@@ -153,6 +264,11 @@ final class SettingsViewModel: ObservableObject {
         alertMessage = "This feature will allow you to change your passcode. Implementation coming soon."
         isDestructiveAlert = false
         showAlert = true
+    }
+
+    /// Locks the app immediately
+    func lockAppNow() {
+        appLockManager.lockApp()
     }
 
     // MARK: - Storage Actions
@@ -182,6 +298,62 @@ final class SettingsViewModel: ObservableObject {
             alertMessage = "Thumbnail cache has been cleared."
             isDestructiveAlert = false
             showAlert = true
+        }
+    }
+
+    /// Shows confirmation dialog for regenerating all thumbnails
+    func showRegenerateThumbnailsConfirmation() {
+        guard photosNeedingThumbnails > 0 else {
+            alertTitle = "No Thumbnails to Regenerate"
+            alertMessage = "All photos already have thumbnails."
+            isDestructiveAlert = false
+            showAlert = true
+            return
+        }
+
+        alertTitle = "Regenerate Thumbnails"
+        alertMessage = "This will regenerate thumbnails for \(photosNeedingThumbnails) photo\(photosNeedingThumbnails == 1 ? "" : "s"). This may take a while."
+        isDestructiveAlert = false
+        pendingAction = { [weak self] in
+            self?.regenerateAllThumbnails()
+        }
+        showAlert = true
+    }
+
+    /// Regenerates all failed thumbnails
+    private func regenerateAllThumbnails() {
+        guard !isRegeneratingThumbnails else { return }
+
+        isRegeneratingThumbnails = true
+        thumbnailRegenerationProgress = (0, photosNeedingThumbnails)
+
+        Task {
+            do {
+                let successCount = try await SecurePhotoStorage.shared.regenerateAllFailedThumbnails { [weak self] completed, total in
+                    Task { @MainActor in
+                        self?.thumbnailRegenerationProgress = (completed, total)
+                    }
+                }
+
+                isRegeneratingThumbnails = false
+
+                // Reload stats
+                loadStorageStats()
+
+                // Show success message
+                alertTitle = "Thumbnails Regenerated"
+                alertMessage = "Successfully regenerated \(successCount) thumbnail\(successCount == 1 ? "" : "s")."
+                isDestructiveAlert = false
+                showAlert = true
+            } catch {
+                isRegeneratingThumbnails = false
+                AppLogger.settings.error("Failed to regenerate thumbnails: \(error.localizedDescription, privacy: .public)")
+
+                alertTitle = "Regeneration Failed"
+                alertMessage = "Some thumbnails could not be regenerated. Please try again."
+                isDestructiveAlert = false
+                showAlert = true
+            }
         }
     }
 

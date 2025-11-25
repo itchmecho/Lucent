@@ -461,7 +461,8 @@ class SearchViewModel: ObservableObject {
 
     func setRecentDateRange() {
         let end = Date()
-        let start = Calendar.current.date(byAdding: .day, value: -7, to: end)!
+        // Calendar.date(byAdding:) can technically return nil, but for -7 days it's safe
+        let start = Calendar.current.date(byAdding: .day, value: -7, to: end) ?? end
         dateRange = (start, end)
     }
 
@@ -469,8 +470,9 @@ class SearchViewModel: ObservableObject {
         let calendar = Calendar.current
         let now = Date()
         let components = calendar.dateComponents([.year, .month], from: now)
-        let start = calendar.date(from: components)!
-        let end = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: start)!
+        // Fall back to current date if date calculation fails (shouldn't happen)
+        let start = calendar.date(from: components) ?? now
+        let end = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: start) ?? now
         dateRange = (start, end)
     }
 }

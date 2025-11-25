@@ -3,15 +3,22 @@ import os.log
 
 struct ContentView: View {
     @State private var selectedTab = 0
+    @AppStorage("useGridView") private var useGridView = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Photos tab
-            PhotosMainView()
-                .tabItem {
-                    Label("Photos", systemImage: "photo.on.rectangle")
+            // Photos tab - switch between list and grid view
+            Group {
+                if useGridView {
+                    PhotoGridView()
+                } else {
+                    PhotosMainView()
                 }
-                .tag(0)
+            }
+            .tabItem {
+                Label("Photos", systemImage: "photo.on.rectangle")
+            }
+            .tag(0)
 
             // Settings tab
             SettingsView()
@@ -26,12 +33,14 @@ struct ContentView: View {
 // Main photos view
 struct PhotosMainView: View {
     @State private var photos: [EncryptedPhoto] = []
+    @State private var thumbnails: [UUID: PlatformImage] = [:]
+    @State private var loadingThumbnails: Set<UUID> = []
     @State private var isLoading = true
     @State private var showingImportMenu = false
-    @State private var selectedPhoto: EncryptedPhoto?
-    @State private var showingPhotoDetail = false
+    @State private var selectedPhotoForDetail: EncryptedPhoto?
     @State private var photoToDelete: EncryptedPhoto?
     @State private var showingDeleteConfirmation = false
+    @AppStorage("showThumbnails") private var showThumbnails = true
 
     var body: some View {
         NavigationStack {
@@ -82,12 +91,9 @@ struct PhotosMainView: View {
                     }
                 })
             }
-            .sheet(isPresented: $showingPhotoDetail) {
-                if let photo = selectedPhoto {
-                    PhotoDetailView(photo: photo, allPhotos: photos) {
-                        showingPhotoDetail = false
-                        selectedPhoto = nil
-                    }
+            .sheet(item: $selectedPhotoForDetail) { photo in
+                PhotoDetailView(photo: photo, allPhotos: photos) {
+                    selectedPhotoForDetail = nil
                 }
             }
             .alert("Delete Photo", isPresented: $showingDeleteConfirmation) {
@@ -132,23 +138,39 @@ struct PhotosMainView: View {
         ScrollView {
             VStack(spacing: DesignTokens.Spacing.md) {
                 ForEach(photos) { photo in
-                    PhotoRowView(photo: photo)
-                        .onTapGesture {
-                            selectedPhoto = photo
-                            showingPhotoDetail = true
+                    PhotoRowView(
+                        photo: photo,
+                        thumbnail: thumbnails[photo.id],
+                        isLoading: loadingThumbnails.contains(photo.id)
+                    )
+                    .onTapGesture {
+                        selectedPhotoForDetail = photo
+                    }
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            photoToDelete = photo
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
-                        .contextMenu {
-                            Button(role: .destructive) {
-                                photoToDelete = photo
-                                showingDeleteConfirmation = true
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
+                    }
+                    .task {
+                        if showThumbnails {
+                            await loadThumbnail(for: photo)
                         }
+                    }
+                    .onChange(of: showThumbnails) { oldValue, newValue in
+                        if !newValue {
+                            // Clear thumbnails from memory when disabled
+                            thumbnails.removeAll()
+                            loadingThumbnails.removeAll()
+                        }
+                    }
                 }
             }
             .padding(DesignTokens.Spacing.lg)
         }
+        .scrollContentBackground(.hidden)
     }
 
     private func loadPhotos() async {
@@ -179,22 +201,69 @@ struct PhotosMainView: View {
             AppLogger.storage.error("Error deleting photo: \(error.localizedDescription, privacy: .public)")
         }
     }
+
+    private func loadThumbnail(for photo: EncryptedPhoto) async {
+        // Skip if already loaded or loading
+        guard thumbnails[photo.id] == nil, !loadingThumbnails.contains(photo.id) else {
+            return
+        }
+
+        loadingThumbnails.insert(photo.id)
+
+        do {
+            // Load and decrypt thumbnail
+            if let thumbnailURL = photo.thumbnailURL {
+                let encryptedData = try Data(contentsOf: thumbnailURL)
+                let decryptedData = try EncryptionManager.shared.decrypt(data: encryptedData)
+
+                // Create platform image
+                if let image = PlatformImage.from(data: decryptedData) {
+                    thumbnails[photo.id] = image
+                }
+            }
+        } catch {
+            AppLogger.storage.error("Failed to load thumbnail for \(photo.id, privacy: .public): \(error.localizedDescription, privacy: .public)")
+        }
+
+        loadingThumbnails.remove(photo.id)
+    }
 }
 
-// Simple photo row
+// Simple photo row with thumbnail support
 struct PhotoRowView: View {
     let photo: EncryptedPhoto
+    var thumbnail: PlatformImage?
+    var isLoading: Bool = false
 
     var body: some View {
         HStack {
-            Image(systemName: "photo")
-                .font(.title2)
-                .foregroundColor(Color.textSecondary)
-                .frame(width: 60, height: 60)
-                .background(
-                    RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.md)
-                        .fill(DesignTokens.Materials.ultraThin)
-                )
+            // Thumbnail or placeholder
+            ZStack {
+                if let thumbnail = thumbnail {
+                    #if canImport(UIKit)
+                    Image(uiImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                    #elseif canImport(AppKit)
+                    Image(nsImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                    #endif
+                } else if isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                } else {
+                    Image(systemName: "photo")
+                        .font(.title2)
+                        .foregroundColor(Color.textSecondary)
+                }
+            }
+            .frame(width: 60, height: 60)
+            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.md))
+            .background(
+                RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.md)
+                    .fill(DesignTokens.Materials.ultraThin)
+            )
 
             VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                 Text(photo.filename)

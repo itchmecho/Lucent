@@ -43,9 +43,49 @@ enum AppLogger {
     /// Logger for settings and preferences
     static let settings = Logger(subsystem: subsystem, category: "Settings")
 
+    /// Logger for performance metrics (visible in Instruments)
+    static let performance = Logger(subsystem: subsystem, category: OSLog.Category.pointsOfInterest.rawValue)
+
     // MARK: - Private Properties
 
     private static let subsystem = "com.lucent.app"
+}
+
+// MARK: - Performance Signposts
+
+/// OSLog handle for performance signposts (visible in Instruments)
+let performanceLog = OSLog(subsystem: "com.lucent.app", category: .pointsOfInterest)
+
+/// Helper for measuring operation duration
+///
+/// Usage:
+/// ```swift
+/// let operation = PerformanceSignpost(name: "Photo Import")
+/// // ... do work ...
+/// operation.end()  // or just let it deallocate
+/// ```
+final class PerformanceSignpost {
+    private let signpostID: OSSignpostID
+    private let name: StaticString
+    private var hasEnded = false
+
+    init(name: StaticString) {
+        self.name = name
+        self.signpostID = OSSignpostID(log: performanceLog)
+        os_signpost(.begin, log: performanceLog, name: name, signpostID: signpostID)
+    }
+
+    func end() {
+        guard !hasEnded else { return }
+        hasEnded = true
+        os_signpost(.end, log: performanceLog, name: name, signpostID: signpostID)
+    }
+
+    deinit {
+        if !hasEnded {
+            end()
+        }
+    }
 }
 
 // MARK: - Logging Levels

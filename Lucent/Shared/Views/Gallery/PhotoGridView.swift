@@ -88,7 +88,12 @@ struct PhotoGridView: View {
                     PhotoGridCell(
                         photo: photo,
                         thumbnail: viewModel.thumbnails[photo.id],
-                        isLoading: viewModel.loadingPhotos.contains(photo.id)
+                        isLoading: viewModel.loadingPhotos.contains(photo.id),
+                        onRegenerateThumbnail: photo.thumbnailGenerationFailed ? {
+                            Task {
+                                await viewModel.regenerateThumbnail(for: photo)
+                            }
+                        } : nil
                     )
                     .aspectRatio(1, contentMode: .fill)
                     .onTapGesture {
@@ -258,47 +263,72 @@ struct PhotoGridCell: View {
     let photo: EncryptedPhoto
     let thumbnail: PlatformImage?
     let isLoading: Bool
+    var onRegenerateThumbnail: (() -> Void)? = nil
 
     var body: some View {
-        ZStack {
-            if let thumbnail = thumbnail {
-                #if canImport(UIKit)
-                Image(uiImage: thumbnail)
-                    .resizable()
-                    .scaledToFill()
-                #elseif canImport(AppKit)
-                Image(nsImage: thumbnail)
-                    .resizable()
-                    .scaledToFill()
-                #endif
-            } else if isLoading {
-                Color.gray.opacity(0.2)
-                ProgressView()
-            } else {
-                Color.gray.opacity(0.2)
-                Image(systemName: "photo")
-                    .font(.title)
-                    .foregroundStyle(.secondary)
-            }
-
-            // Favorite badge
-            if photo.metadata.isFavorite {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "star.fill")
-                            .font(.caption)
-                            .foregroundStyle(.yellow)
-                            .padding(6)
-                            .background(.ultraThinMaterial)
-                            .clipShape(Circle())
-                            .padding(4)
+        GeometryReader { geometry in
+            ZStack {
+                if let thumbnail = thumbnail {
+                    #if canImport(UIKit)
+                    Image(uiImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                    #elseif canImport(AppKit)
+                    Image(nsImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                    #endif
+                } else if isLoading {
+                    Color.gray.opacity(0.2)
+                    ProgressView()
+                } else if photo.thumbnailGenerationFailed {
+                    // Show failed state with retry option
+                    Color.gray.opacity(0.2)
+                    VStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.orange)
+                        if let onRegenerate = onRegenerateThumbnail {
+                            Button(action: onRegenerate) {
+                                Text("Retry")
+                                    .font(.caption2)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    Spacer()
+                } else {
+                    Color.gray.opacity(0.2)
+                    Image(systemName: "photo")
+                        .font(.title)
+                        .foregroundStyle(.secondary)
+                }
+
+                // Favorite badge
+                if photo.metadata.isFavorite {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "star.fill")
+                                .font(.caption)
+                                .foregroundStyle(.yellow)
+                                .padding(6)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Circle())
+                                .padding(4)
+                        }
+                        Spacer()
+                    }
                 }
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .clipped()
         }
-        .clipped()
         .clipShape(RoundedRectangle(cornerRadius: 2))
     }
 }
