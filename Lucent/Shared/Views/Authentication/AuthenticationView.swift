@@ -137,11 +137,11 @@ struct AuthenticationView: View {
                     )
                 )
 
-            Text("Lucent")
+            Text(L10n.Common.appName)
                 .font(.system(size: 36, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
 
-            Text("Your photos are protected")
+            Text(L10n.Auth.photosProtected)
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.7))
         }
@@ -160,7 +160,7 @@ struct AuthenticationView: View {
                         .font(.system(size: 50))
                         .foregroundColor(.white)
 
-                    Text("Unlock with \(biometricAuthManager.biometricType.displayName)")
+                    Text(L10n.Auth.unlockWith(biometricAuthManager.biometricType.displayName))
                         .font(.headline)
                         .foregroundColor(.white)
                 }
@@ -192,7 +192,7 @@ struct AuthenticationView: View {
                     showPasscodeView = true
                     authenticationError = nil
                 }) {
-                    Text("Use Passcode")
+                    Text(L10n.Auth.usePasscode)
                         .font(.subheadline)
                         .foregroundColor(.white)
                         .padding(.vertical, 12)
@@ -220,7 +220,7 @@ struct AuthenticationView: View {
 
         // Use AppLockManager's authenticate method to ensure proper state management
         // This prevents race conditions with app lifecycle events
-        let success = await appLockManager.authenticate(reason: "Unlock Lucent to access your photos")
+        let success = await appLockManager.authenticate(reason: L10n.Auth.unlockReason)
 
         isAuthenticating = false
 

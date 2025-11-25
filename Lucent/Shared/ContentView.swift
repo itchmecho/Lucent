@@ -16,14 +16,14 @@ struct ContentView: View {
                 }
             }
             .tabItem {
-                Label("Photos", systemImage: "photo.on.rectangle")
+                Label(L10n.Tabs.photos, systemImage: "photo.on.rectangle")
             }
             .tag(0)
 
             // Settings tab
             SettingsView()
                 .tabItem {
-                    Label("Settings", systemImage: "gear")
+                    Label(L10n.Tabs.settings, systemImage: "gear")
                 }
                 .tag(1)
         }
@@ -62,7 +62,7 @@ struct PhotosMainView: View {
                         ProgressView()
                             .scaleEffect(1.5)
                             .tint(Color.textPrimary)
-                        Text("Loading...")
+                        Text(L10n.Common.loading)
                             .foregroundColor(Color.textSecondary)
                     }
                 } else if photos.isEmpty {
@@ -96,17 +96,17 @@ struct PhotosMainView: View {
                     selectedPhotoForDetail = nil
                 }
             }
-            .alert("Delete Photo", isPresented: $showingDeleteConfirmation) {
-                Button("Delete", role: .destructive) {
+            .alert(L10n.Photos.deletePhotoTitle, isPresented: $showingDeleteConfirmation) {
+                Button(L10n.Common.delete, role: .destructive) {
                     if let photo = photoToDelete {
                         Task {
                             await deletePhoto(photo)
                         }
                     }
                 }
-                Button("Cancel", role: .cancel) {}
+                Button(L10n.Common.cancel, role: .cancel) {}
             } message: {
-                Text("Are you sure you want to delete this photo? This action cannot be undone.")
+                Text(L10n.Photos.deletePhotoMessage)
             }
             .task {
                 await loadPhotos()
@@ -120,12 +120,12 @@ struct PhotosMainView: View {
                 .font(.system(size: DesignTokens.IconSize.huge))
                 .foregroundColor(Color.textSecondary)
 
-            Text("No Photos Yet")
+            Text(L10n.Photos.noPhotosTitle)
                 .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(Color.textPrimary)
 
-            Text("Your secure photo vault is ready.\nTap the + button to add photos.")
+            Text(L10n.Photos.noPhotosMessage)
                 .font(.subheadline)
                 .foregroundColor(Color.textSecondary)
                 .multilineTextAlignment(.center)
@@ -151,7 +151,7 @@ struct PhotosMainView: View {
                             photoToDelete = photo
                             showingDeleteConfirmation = true
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            Label(L10n.Common.delete, systemImage: "trash")
                         }
                     }
                     .task {
@@ -318,13 +318,13 @@ struct ImportMenuView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: DesignTokens.Spacing.lg) {
-                    Text("Add Photos")
+                    Text(L10n.Import.addPhotos)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color.textPrimary)
                         .padding(.top, DesignTokens.Spacing.xl)
 
-                    Text("Choose how to add photos to your vault")
+                    Text(L10n.Import.chooseMethod)
                         .font(.subheadline)
                         .foregroundColor(Color.textSecondary)
                         .multilineTextAlignment(.center)

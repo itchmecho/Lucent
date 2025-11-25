@@ -1,0 +1,1293 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "common.app_name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lucent" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Lucent" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lucent" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Lucent" } }
+      }
+    },
+    "common.ok" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aceptar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "OK" } }
+      }
+    },
+    "common.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cancelar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Annuler" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cancelar" } }
+      }
+    },
+    "common.done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Done" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Listo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Terminé" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Concluído" } }
+      }
+    },
+    "common.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Excluir" } }
+      }
+    },
+    "common.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Confirm" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Confirmar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Confirmer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Confirmar" } }
+      }
+    },
+    "common.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Error" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Error" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Erreur" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Erro" } }
+      }
+    },
+    "common.success" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Success" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Éxito" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Succès" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sucesso" } }
+      }
+    },
+    "common.loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading..." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cargando..." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Chargement..." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Carregando..." } }
+      }
+    },
+    "common.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Guardar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Enregistrer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Salvar" } }
+      }
+    },
+    "common.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Editar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Modifier" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Editar" } }
+      }
+    },
+    "common.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionar" } }
+      }
+    },
+    "common.create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crear" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Criar" } }
+      }
+    },
+    "common.move" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Move" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mover" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Déplacer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mover" } }
+      }
+    },
+    "common.export" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Exportar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exporter" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exportar" } }
+      }
+    },
+    "common.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Compartir" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Partager" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Compartilhar" } }
+      }
+    },
+    "common.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nuevo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nouveau" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Novo" } }
+      }
+    },
+    "common.unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unknown" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Desconocido" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Inconnu" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Desconhecido" } }
+      }
+    },
+    "tabs.photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fotos" } }
+      }
+    },
+    "tabs.settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ajustes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réglages" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Configurações" } }
+      }
+    },
+    "tabs.albums" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Albums" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Álbumes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Albums" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Álbuns" } }
+      }
+    },
+    "photos.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fotos" } }
+      }
+    },
+    "photos.no_photos_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Photos Yet" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin Fotos Aún" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune Photo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nenhuma Foto Ainda" } }
+      }
+    },
+    "photos.no_photos_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your secure photo vault is ready.\nTap the + button to add photos." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu bóveda de fotos segura está lista.\nToca el botón + para añadir fotos." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Votre coffre-fort photo sécurisé est prêt.\nAppuyez sur + pour ajouter des photos." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seu cofre de fotos seguro está pronto.\nToque no botão + para adicionar fotos." } }
+      }
+    },
+    "photos.loading_photo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading photo..." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cargando foto..." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Chargement de la photo..." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Carregando foto..." } }
+      }
+    },
+    "photos.delete_photo_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete Photo?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿Eliminar Foto?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer la Photo ?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Excluir Foto?" } }
+      }
+    },
+    "photos.delete_photo_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Are you sure you want to delete this photo? This action cannot be undone." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿Estás seguro de que quieres eliminar esta foto? Esta acción no se puede deshacer." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Êtes-vous sûr de vouloir supprimer cette photo ? Cette action est irréversible." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tem certeza de que deseja excluir esta foto? Esta ação não pode ser desfeita." } }
+      }
+    },
+    "photos.delete_photos_title %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete %lld Photos?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿Eliminar %lld Fotos?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer %lld Photos ?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Excluir %lld Fotos?" } }
+      }
+    },
+    "photos.delete_single_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This photo will be permanently deleted. This action cannot be undone." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esta foto se eliminará permanentemente. Esta acción no se puede deshacer." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cette photo sera définitivement supprimée. Cette action est irréversible." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Esta foto será excluída permanentemente. Esta ação não pode ser desfeita." } }
+      }
+    },
+    "photos.delete_multiple_message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "These %lld photos will be permanently deleted. This action cannot be undone." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Estas %lld fotos se eliminarán permanentemente. Esta acción no se puede deshacer." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ces %lld photos seront définitivement supprimées. Cette action est irréversible." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Estas %lld fotos serão excluídas permanentemente. Esta ação não pode ser desfeita." } }
+      }
+    },
+    "photos.export_photo_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export Photo?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿Exportar Foto?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exporter la Photo ?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exportar Foto?" } }
+      }
+    },
+    "photos.export_photos_title %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export %lld Photos?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿Exportar %lld Fotos?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exporter %lld Photos ?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exportar %lld Fotos?" } }
+      }
+    },
+    "photos.export_single_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This photo will be decrypted and saved to your photo library." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esta foto se descifrará y guardará en tu biblioteca de fotos." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cette photo sera déchiffrée et enregistrée dans votre photothèque." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Esta foto será descriptografada e salva na sua biblioteca de fotos." } }
+      }
+    },
+    "photos.export_multiple_message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "These %lld photos will be decrypted and saved to your photo library." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Estas %lld fotos se descifrarán y guardarán en tu biblioteca de fotos." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ces %lld photos seront déchiffrées et enregistrées dans votre photothèque." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Estas %lld fotos serão descriptografadas e salvas na sua biblioteca de fotos." } }
+      }
+    },
+    "photos.export_to_library" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export to Photo Library" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Exportar a Biblioteca de Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exporter vers la Photothèque" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exportar para Biblioteca de Fotos" } }
+      }
+    },
+    "photos.photo_count_single" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "1 photo" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "1 foto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "1 photo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "1 foto" } }
+      }
+    },
+    "photos.photo_count %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "%lld fotos" } }
+      }
+    },
+    "import.add_photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter des Photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionar Fotos" } }
+      }
+    },
+    "import.choose_method" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Choose how to add photos to your vault" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Elige cómo añadir fotos a tu bóveda" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisissez comment ajouter des photos à votre coffre" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escolha como adicionar fotos ao seu cofre" } }
+      }
+    },
+    "import.select_from_library" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select from Library" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Seleccionar de la Biblioteca" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Sélectionner depuis la Bibliothèque" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Selecionar da Biblioteca" } }
+      }
+    },
+    "import.take_photo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Take Photo" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tomar Foto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prendre une Photo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tirar Foto" } }
+      }
+    },
+    "import.importing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Importing..." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Importando..." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Importation..." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Importando..." } }
+      }
+    },
+    "import.importing_progress %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Importing %1$lld of %2$lld" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Importando %1$lld de %2$lld" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Importation %1$lld sur %2$lld" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Importando %1$lld de %2$lld" } }
+      }
+    },
+    "import.import_complete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Import Complete" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Importación Completada" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Importation Terminée" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Importação Concluída" } }
+      }
+    },
+    "import.permission_required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photo Library Access Required" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Se Requiere Acceso a la Biblioteca de Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Accès à la Photothèque Requis" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Acesso à Biblioteca de Fotos Necessário" } }
+      }
+    },
+    "import.permission_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lucent needs access to your photo library to import photos." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Lucent necesita acceso a tu biblioteca de fotos para importar fotos." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lucent a besoin d'accéder à votre photothèque pour importer des photos." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O Lucent precisa de acesso à sua biblioteca de fotos para importar fotos." } }
+      }
+    },
+    "import.open_settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Settings" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Abrir Ajustes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir les Réglages" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Abrir Configurações" } }
+      }
+    },
+    "albums.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Albums" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Álbumes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Albums" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Álbuns" } }
+      }
+    },
+    "albums.library" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Library" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Biblioteca" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Bibliothèque" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Biblioteca" } }
+      }
+    },
+    "albums.my_albums" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "My Albums" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mis Álbumes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mes Albums" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Meus Álbuns" } }
+      }
+    },
+    "albums.no_albums_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Albums Yet" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin Álbumes Aún" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nenhum Álbum Ainda" } }
+      }
+    },
+    "albums.no_albums_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create your first album to organize your photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crea tu primer álbum para organizar tus fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créez votre premier album pour organiser vos photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Crie seu primeiro álbum para organizar suas fotos" } }
+      }
+    },
+    "albums.create_album" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create Album" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crear Álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer un Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Criar Álbum" } }
+      }
+    },
+    "albums.delete_album" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete Album" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar Álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer l'Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Excluir Álbum" } }
+      }
+    },
+    "albums.album_name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Album Name" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nombre del Álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nom de l'Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nome do Álbum" } }
+      }
+    },
+    "albums.enter_album_name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter album name" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ingresa el nombre del álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Entrez le nom de l'album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Digite o nome do álbum" } }
+      }
+    },
+    "albums.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Description" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Descripción" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Description" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Descrição" } }
+      }
+    },
+    "albums.enter_description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter a description" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ingresa una descripción" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Entrez une description" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Digite uma descrição" } }
+      }
+    },
+    "albums.all_photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All Photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todas las Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Toutes les Photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Todas as Fotos" } }
+      }
+    },
+    "albums.favorites" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Favorites" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Favoritos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Favoris" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Favoritos" } }
+      }
+    },
+    "albums.recents" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Recents" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Recientes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Récents" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Recentes" } }
+      }
+    },
+    "albums.move_to_album" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Move to Album" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mover a Álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Déplacer vers l'Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mover para Álbum" } }
+      }
+    },
+    "albums.create_new_album" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create New Album" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crear Nuevo Álbum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer un Nouvel Album" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Criar Novo Álbum" } }
+      }
+    },
+    "albums.photos_to_move" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos to Move" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fotos a Mover" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Photos à Déplacer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fotos a Mover" } }
+      }
+    },
+    "tags.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tags" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Etiquetas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tags" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tags" } }
+      }
+    },
+    "tags.add_tags" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Tags" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir Etiquetas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter des Tags" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionar Tags" } }
+      }
+    },
+    "tags.tag_name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tag Name" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nombre de Etiqueta" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nom du Tag" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nome da Tag" } }
+      }
+    },
+    "tags.create_new_tag" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create New Tag" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crear Nueva Etiqueta" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer un Nouveau Tag" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Criar Nova Tag" } }
+      }
+    },
+    "tags.selected_tags" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Selected Tags" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Etiquetas Seleccionadas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tags Sélectionnés" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tags Selecionadas" } }
+      }
+    },
+    "tags.photos_to_tag" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos to Tag" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fotos a Etiquetar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Photos à Taguer" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fotos para Marcar" } }
+      }
+    },
+    "auth.photos_protected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your photos are protected" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tus fotos están protegidas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Vos photos sont protégées" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Suas fotos estão protegidas" } }
+      }
+    },
+    "auth.use_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Use Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Usar Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Utiliser le Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Usar Código" } }
+      }
+    },
+    "auth.unlock_with %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unlock with %@" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Desbloquear con %@" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Déverrouiller avec %@" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Desbloquear com %@" } }
+      }
+    },
+    "auth.unlock_reason" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unlock Lucent to access your photos" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Desbloquea Lucent para acceder a tus fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Déverrouillez Lucent pour accéder à vos photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Desbloqueie o Lucent para acessar suas fotos" } }
+      }
+    },
+    "auth.face_id" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Face ID" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Face ID" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Face ID" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Face ID" } }
+      }
+    },
+    "auth.touch_id" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Touch ID" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Touch ID" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Touch ID" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Touch ID" } }
+      }
+    },
+    "auth.optic_id" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Optic ID" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Optic ID" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Optic ID" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Optic ID" } }
+      }
+    },
+    "auth.biometrics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Biometrics" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Biometría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Biométrie" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Biometria" } }
+      }
+    },
+    "auth.enter_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ingresa el Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Entrez le Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Digite o Código" } }
+      }
+    },
+    "auth.create_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crear Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer un Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Criar Código" } }
+      }
+    },
+    "auth.confirm_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Confirm Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Confirmar Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Confirmer le Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Confirmar Código" } }
+      }
+    },
+    "auth.wrong_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wrong Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Código Incorrecto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Code Incorrect" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Código Incorreto" } }
+      }
+    },
+    "auth.passcode_mismatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Passcodes don't match" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Los códigos no coinciden" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les codes ne correspondent pas" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Os códigos não coincidem" } }
+      }
+    },
+    "settings.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ajustes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réglages" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Configurações" } }
+      }
+    },
+    "settings.security" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Security" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Seguridad" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Sécurité" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Segurança" } }
+      }
+    },
+    "settings.storage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Storage" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Almacenamiento" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Stockage" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Armazenamento" } }
+      }
+    },
+    "settings.appearance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Apariencia" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Apparence" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Aparência" } }
+      }
+    },
+    "settings.backup_data" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Backup & Data" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Respaldo y Datos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Sauvegarde et Données" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Backup e Dados" } }
+      }
+    },
+    "settings.about" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "About" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Acerca de" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "À propos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sobre" } }
+      }
+    },
+    "settings.auto_lock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Auto-lock" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bloqueo Automático" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Verrouillage Auto" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Bloqueio Automático" } }
+      }
+    },
+    "settings.auto_lock_timer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Auto-lock Timer" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Temporizador de Bloqueo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Minuterie de Verrouillage" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Temporizador de Bloqueio" } }
+      }
+    },
+    "settings.use_biometric_to_unlock %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Use %@ to unlock" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Usar %@ para desbloquear" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Utiliser %@ pour déverrouiller" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Usar %@ para desbloquear" } }
+      }
+    },
+    "settings.change_passcode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Change Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cambiar Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Changer le Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Alterar Código" } }
+      }
+    },
+    "settings.require_on_launch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Require on Launch" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Requerir al Iniciar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exiger au Lancement" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exigir ao Iniciar" } }
+      }
+    },
+    "settings.lock_when_app_closes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lock when app closes" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bloquear al cerrar la app" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Verrouiller à la fermeture" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Bloquear ao fechar o app" } }
+      }
+    },
+    "settings.immediate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Immediate" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Inmediato" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Immédiat" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Imediato" } }
+      }
+    },
+    "settings.one_minute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "1 Minute" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "1 Minuto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "1 Minute" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "1 Minuto" } }
+      }
+    },
+    "settings.five_minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "5 Minutes" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "5 Minutos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "5 Minutes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "5 Minutos" } }
+      }
+    },
+    "settings.fifteen_minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "15 Minutes" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "15 Minutos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "15 Minutes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "15 Minutos" } }
+      }
+    },
+    "settings.never" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Never" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nunca" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Jamais" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nunca" } }
+      }
+    },
+    "settings.total_storage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total Storage" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Almacenamiento Total" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Stockage Total" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Armazenamento Total" } }
+      }
+    },
+    "settings.photos_stored" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos Stored" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fotos Almacenadas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Photos Stockées" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fotos Armazenadas" } }
+      }
+    },
+    "settings.clear_thumbnail_cache" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Clear Thumbnail Cache" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Borrar Caché de Miniaturas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Vider le Cache des Miniatures" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Limpar Cache de Miniaturas" } }
+      }
+    },
+    "settings.clear_cache_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This will clear cached thumbnails and free up space. Thumbnails will be regenerated when needed." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esto borrará las miniaturas en caché y liberará espacio. Las miniaturas se regenerarán cuando sea necesario." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cela effacera les miniatures en cache et libérera de l'espace. Les miniatures seront régénérées si nécessaire." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Isso limpará as miniaturas em cache e liberará espaço. As miniaturas serão regeneradas quando necessário." } }
+      }
+    },
+    "settings.cache_cleared" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Thumbnail cache has been cleared." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "La caché de miniaturas ha sido borrada." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Le cache des miniatures a été vidé." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O cache de miniaturas foi limpo." } }
+      }
+    },
+    "settings.system" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "System" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sistema" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Système" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sistema" } }
+      }
+    },
+    "settings.light" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Light" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Claro" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Clair" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Claro" } }
+      }
+    },
+    "settings.dark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dark" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Oscuro" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Sombre" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escuro" } }
+      }
+    },
+    "settings.show_photo_counts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Show Photo Counts" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar Conteo de Fotos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher le Nombre de Photos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar Contagem de Fotos" } }
+      }
+    },
+    "settings.display_counts_on_albums" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Display counts on albums" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar conteos en álbumes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher les compteurs sur les albums" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exibir contagens nos álbuns" } }
+      }
+    },
+    "settings.show_thumbnails" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Show Thumbnails" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar Miniaturas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher les Miniatures" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar Miniaturas" } }
+      }
+    },
+    "settings.display_photo_previews_in_grid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Display photo previews in grid" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mostrar vistas previas en cuadrícula" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Afficher les aperçus en grille" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exibir pré-visualizações em grade" } }
+      }
+    },
+    "settings.export_metadata" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export Metadata" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Exportar Metadatos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exporter les Métadonnées" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Exportar Metadados" } }
+      }
+    },
+    "settings.non_sensitive_data_only" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Non-sensitive data only" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Solo datos no sensibles" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Données non sensibles uniquement" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Apenas dados não sensíveis" } }
+      }
+    },
+    "settings.export_metadata_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This will export non-sensitive metadata (dates, tags, albums) to a file. Photos and encryption keys will NOT be included." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esto exportará metadatos no sensibles (fechas, etiquetas, álbumes) a un archivo. Las fotos y las claves de cifrado NO se incluirán." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cela exportera les métadonnées non sensibles (dates, tags, albums) dans un fichier. Les photos et les clés de chiffrement ne seront PAS incluses." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Isso exportará metadados não sensíveis (datas, tags, álbuns) para um arquivo. As fotos e chaves de criptografia NÃO serão incluídas." } }
+      }
+    },
+    "settings.local_storage_only" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Local Storage Only" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Solo Almacenamiento Local" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Stockage Local Uniquement" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Apenas Armazenamento Local" } }
+      }
+    },
+    "settings.local_storage_warning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos are stored only on this device. Back up your device regularly." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Las fotos se almacenan solo en este dispositivo. Haz copias de seguridad regularmente." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les photos sont stockées uniquement sur cet appareil. Sauvegardez régulièrement votre appareil." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "As fotos são armazenadas apenas neste dispositivo. Faça backup do seu dispositivo regularmente." } }
+      }
+    },
+    "settings.version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Versión" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Versão" } }
+      }
+    },
+    "settings.build" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Build" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Compilación" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Build" } }
+      }
+    },
+    "settings.privacy_policy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Privacy Policy" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Política de Privacidad" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Politique de Confidentialité" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Política de Privacidade" } }
+      }
+    },
+    "settings.privacy_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lucent is committed to your privacy. All photos are stored locally on your device with end-to-end encryption. No data is collected or transmitted." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Lucent está comprometido con tu privacidad. Todas las fotos se almacenan localmente en tu dispositivo con cifrado de extremo a extremo. No se recopila ni transmite ningún dato." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lucent s'engage à protéger votre vie privée. Toutes les photos sont stockées localement sur votre appareil avec un chiffrement de bout en bout. Aucune donnée n'est collectée ni transmise." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O Lucent está comprometido com sua privacidade. Todas as fotos são armazenadas localmente no seu dispositivo com criptografia de ponta a ponta. Nenhum dado é coletado ou transmitido." } }
+      }
+    },
+    "settings.open_source_licenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Source Licenses" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Licencias de Código Abierto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Licences Open Source" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Licenças de Código Aberto" } }
+      }
+    },
+    "settings.licenses_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This app is built with open source software. License information will be available in a future update." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esta aplicación está construida con software de código abierto. La información de licencias estará disponible en una actualización futura." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cette application est construite avec des logiciels open source. Les informations de licence seront disponibles dans une future mise à jour." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Este aplicativo é construído com software de código aberto. As informações de licença estarão disponíveis em uma atualização futura." } }
+      }
+    },
+    "settings.made_with_care" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Made with care for your privacy" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Hecho con cuidado para tu privacidad" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Conçu avec soin pour votre vie privée" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Feito com cuidado para sua privacidade" } }
+      }
+    },
+    "settings.change_passcode_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Change Passcode" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cambiar Código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Changer le Code" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Alterar Código" } }
+      }
+    },
+    "settings.change_passcode_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This feature will allow you to change your passcode. Implementation coming soon." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Esta función te permitirá cambiar tu código. Implementación próximamente." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cette fonctionnalité vous permettra de changer votre code. Disponible prochainement." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Este recurso permitirá que você altere seu código. Implementação em breve." } }
+      }
+    },
+    "alerts.operation_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Operation Failed" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Operación Fallida" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Opération Échouée" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Operação Falhou" } }
+      }
+    },
+    "alerts.unknown_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "An unknown error occurred" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ocurrió un error desconocido" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Une erreur inconnue s'est produite" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ocorreu um erro desconhecido" } }
+      }
+    },
+    "alerts.operation_success" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Operation completed successfully" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Operación completada con éxito" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Opération terminée avec succès" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Operação concluída com sucesso" } }
+      }
+    },
+    "metadata.date_added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Date Added" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fecha de Adición" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Date d'Ajout" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Data de Adição" } }
+      }
+    },
+    "metadata.date_taken" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Date Taken" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fecha de Captura" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Date de Prise" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Data da Captura" } }
+      }
+    },
+    "metadata.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Location" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ubicación" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lieu" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Localização" } }
+      }
+    },
+    "metadata.camera" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Camera" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cámara" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Appareil Photo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Câmera" } }
+      }
+    },
+    "metadata.dimensions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dimensions" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Dimensiones" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Dimensions" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Dimensões" } }
+      }
+    },
+    "metadata.file_size" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "File Size" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tamaño del Archivo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Taille du Fichier" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tamanho do Arquivo" } }
+      }
+    },
+    "metadata.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Format" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Formato" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Format" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Formato" } }
+      }
+    },
+    "slideshow.play" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Play" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Reproducir" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lecture" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Reproduzir" } }
+      }
+    },
+    "slideshow.pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pause" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pausar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pause" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pausar" } }
+      }
+    },
+    "slideshow.exit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Exit Slideshow" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Salir de Presentación" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Quitter le Diaporama" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sair da Apresentação" } }
+      }
+    },
+    "search.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Buscar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Rechercher" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Buscar" } }
+      }
+    },
+    "search.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search photos..." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Buscar fotos..." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Rechercher des photos..." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Buscar fotos..." } }
+      }
+    },
+    "search.no_results" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Results" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin Resultados" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun Résultat" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nenhum Resultado" } }
+      }
+    },
+    "search.no_results_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try searching with different terms" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Intenta buscar con otros términos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Essayez avec d'autres termes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tente buscar com outros termos" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

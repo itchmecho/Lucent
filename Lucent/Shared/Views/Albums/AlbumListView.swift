@@ -37,7 +37,7 @@ struct AlbumListView: View {
                         // System Albums Section
                         if !viewModel.systemAlbums.isEmpty {
                             VStack(alignment: .leading, spacing: 12) {
-                                GlassSectionHeader(title: "Library")
+                                GlassSectionHeader(title: L10n.Albums.library)
 
                                 LazyVGrid(columns: columns, spacing: 16) {
                                     ForEach(viewModel.systemAlbums) { album in
@@ -55,9 +55,9 @@ struct AlbumListView: View {
                         if !viewModel.userAlbums.isEmpty {
                             VStack(alignment: .leading, spacing: 12) {
                                 GlassSectionHeader(
-                                    title: "My Albums",
+                                    title: L10n.Albums.myAlbums,
                                     action: { showingCreateSheet = true },
-                                    actionTitle: "New"
+                                    actionTitle: L10n.Common.new
                                 )
 
                                 LazyVGrid(columns: columns, spacing: 16) {
@@ -70,7 +70,7 @@ struct AlbumListView: View {
                                                 Button(role: .destructive) {
                                                     viewModel.deleteAlbum(album)
                                                 } label: {
-                                                    Label("Delete Album", systemImage: "trash")
+                                                    Label(L10n.Albums.deleteAlbum, systemImage: "trash")
                                                 }
                                             }
                                     }
@@ -87,17 +87,17 @@ struct AlbumListView: View {
                                         .font(.system(size: 60))
                                         .foregroundColor(.secondary)
 
-                                    Text("No Albums Yet")
+                                    Text(L10n.Albums.noAlbumsTitle)
                                         .font(.title2)
                                         .fontWeight(.bold)
 
-                                    Text("Create your first album to organize your photos")
+                                    Text(L10n.Albums.noAlbumsMessage)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .multilineTextAlignment(.center)
 
                                     Button(action: { showingCreateSheet = true }) {
-                                        Text("Create Album")
+                                        Text(L10n.Albums.createAlbum)
                                             .fontWeight(.semibold)
                                             .padding(.horizontal, 24)
                                             .padding(.vertical, 12)
@@ -125,7 +125,7 @@ struct AlbumListView: View {
                         .cornerRadius(12)
                 }
             }
-            .navigationTitle("Albums")
+            .navigationTitle(L10n.Albums.title)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: { showingCreateSheet = true }) {
@@ -140,8 +140,8 @@ struct AlbumListView: View {
             .navigationDestination(item: $selectedAlbum) { album in
                 AlbumDetailView(album: album)
             }
-            .alert("Error", isPresented: $viewModel.showError) {
-                Button("OK", role: .cancel) {}
+            .alert(L10n.Common.error, isPresented: $viewModel.showError) {
+                Button(L10n.Common.ok, role: .cancel) {}
             } message: {
                 Text(viewModel.errorMessage)
             }
@@ -204,7 +204,7 @@ struct AlbumCardView: View {
                         .font(.headline)
                         .lineLimit(1)
 
-                    Text("\(album.photoCount) photo\(album.photoCount == 1 ? "" : "s")")
+                    Text(L10n.Photos.photoCount(album.photoCount))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

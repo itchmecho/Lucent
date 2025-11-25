@@ -56,15 +56,15 @@ struct SettingsView: View {
                     .padding(.bottom, DesignTokens.Spacing.xxl)
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(L10n.Settings.title)
             .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
                 if viewModel.isDestructiveAlert {
-                    Button("Cancel", role: .cancel) { }
-                    Button("Confirm", role: .destructive) {
+                    Button(L10n.Common.cancel, role: .cancel) { }
+                    Button(L10n.Common.confirm, role: .destructive) {
                         viewModel.confirmAction()
                     }
                 } else {
-                    Button("OK", role: .cancel) { }
+                    Button(L10n.Common.ok, role: .cancel) { }
                 }
             } message: {
                 Text(viewModel.alertMessage)
@@ -79,14 +79,14 @@ struct SettingsView: View {
 
     private var securitySection: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
-            GlassSectionHeader(title: "Security")
+            GlassSectionHeader(title: L10n.Settings.security)
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
                     // Auto-lock timer
                     SettingsRowButton(
                         icon: "timer",
-                        title: "Auto-lock",
+                        title: L10n.Settings.autoLock,
                         value: viewModel.autoLockDescription,
                         action: { viewModel.showAutoLockOptions = true }
                     )
@@ -97,7 +97,7 @@ struct SettingsView: View {
                     SettingsRowToggle(
                         icon: viewModel.biometricIcon,
                         title: viewModel.biometricTitle,
-                        subtitle: "Use \(viewModel.biometricTitle) to unlock",
+                        subtitle: L10n.Settings.useBiometricToUnlock(viewModel.biometricTitle),
                         isOn: Binding(
                             get: { viewModel.biometricEnabled },
                             set: { viewModel.setBiometricEnabled($0) }
@@ -111,7 +111,7 @@ struct SettingsView: View {
                     // Change passcode button
                     SettingsRowButton(
                         icon: "key.fill",
-                        title: "Change Passcode",
+                        title: L10n.Settings.changePasscode,
                         action: { viewModel.changePasscode() }
                     )
 
@@ -120,8 +120,8 @@ struct SettingsView: View {
                     // Require passcode on launch toggle
                     SettingsRowToggle(
                         icon: "lock.shield",
-                        title: "Require on Launch",
-                        subtitle: "Lock when app closes",
+                        title: L10n.Settings.requireOnLaunch,
+                        subtitle: L10n.Settings.lockWhenAppCloses,
                         isOn: Binding(
                             get: { viewModel.requirePasscodeOnLaunch },
                             set: { viewModel.setRequireOnLaunch($0) }
@@ -192,14 +192,14 @@ struct SettingsView: View {
 
     private var storageSection: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
-            GlassSectionHeader(title: "Storage")
+            GlassSectionHeader(title: L10n.Settings.storage)
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
                     // Total storage used
                     SettingsRowInfo(
                         icon: "externaldrive.fill",
-                        title: "Total Storage",
+                        title: L10n.Settings.totalStorage,
                         value: viewModel.totalStorageFormatted
                     )
 
@@ -208,7 +208,7 @@ struct SettingsView: View {
                     // Number of photos
                     SettingsRowInfo(
                         icon: "photo.stack.fill",
-                        title: "Photos Stored",
+                        title: L10n.Settings.photosStored,
                         value: "\(viewModel.photoCount)"
                     )
 
@@ -217,7 +217,7 @@ struct SettingsView: View {
                     // Clear thumbnail cache button
                     SettingsRowButton(
                         icon: "trash.fill",
-                        title: "Clear Thumbnail Cache",
+                        title: L10n.Settings.clearThumbnailCache,
                         subtitle: viewModel.thumbnailCacheSize,
                         tintColor: .warning,
                         action: { viewModel.showClearCacheConfirmation() }
@@ -265,14 +265,14 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
-            GlassSectionHeader(title: "Appearance")
+            GlassSectionHeader(title: L10n.Settings.appearance)
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
                     // Dark mode selection
                     SettingsRowButton(
                         icon: "moon.fill",
-                        title: "Appearance",
+                        title: L10n.Settings.appearance,
                         value: viewModel.appearanceModeDescription,
                         action: { viewModel.showAppearanceOptions = true }
                     )
@@ -282,8 +282,8 @@ struct SettingsView: View {
                     // Show photo count badges toggle
                     SettingsRowToggle(
                         icon: "number.circle.fill",
-                        title: "Show Photo Counts",
-                        subtitle: "Display counts on albums",
+                        title: L10n.Settings.showPhotoCounts,
+                        subtitle: L10n.Settings.displayCountsOnAlbums,
                         isOn: $viewModel.showPhotoCounts
                     )
 
@@ -292,8 +292,8 @@ struct SettingsView: View {
                     // Show thumbnails toggle
                     SettingsRowToggle(
                         icon: "photo.fill",
-                        title: "Show Thumbnails",
-                        subtitle: "Display photo previews in grid",
+                        title: L10n.Settings.showThumbnails,
+                        subtitle: L10n.Settings.displayPhotoPreviewsInGrid,
                         isOn: $viewModel.showThumbnails
                     )
 
@@ -318,7 +318,7 @@ struct SettingsView: View {
 
     private var backupSection: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
-            GlassSectionHeader(title: "Backup & Data")
+            GlassSectionHeader(title: L10n.Settings.backupData)
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
@@ -335,8 +335,8 @@ struct SettingsView: View {
                     // Export metadata button
                     SettingsRowButton(
                         icon: "square.and.arrow.up.fill",
-                        title: "Export Metadata",
-                        subtitle: "Non-sensitive data only",
+                        title: L10n.Settings.exportMetadata,
+                        subtitle: L10n.Settings.nonSensitiveDataOnly,
                         action: { viewModel.exportMetadata() }
                     )
 
@@ -345,8 +345,8 @@ struct SettingsView: View {
                     // Local-only warning
                     SettingsRowInfo(
                         icon: "exclamationmark.shield.fill",
-                        title: "Local Storage Only",
-                        subtitle: "Photos are stored only on this device. Create backups regularly.",
+                        title: L10n.Settings.localStorageOnly,
+                        subtitle: L10n.Settings.localStorageWarning,
                         tintColor: .info
                     )
                 }
@@ -361,14 +361,14 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
-            GlassSectionHeader(title: "About")
+            GlassSectionHeader(title: L10n.Settings.about)
 
             GlassCard(padding: 0) {
                 VStack(spacing: 0) {
                     // App version
                     SettingsRowInfo(
                         icon: "info.circle.fill",
-                        title: "Version",
+                        title: L10n.Settings.version,
                         value: viewModel.appVersion
                     )
 
@@ -377,7 +377,7 @@ struct SettingsView: View {
                     // Build number
                     SettingsRowInfo(
                         icon: "hammer.fill",
-                        title: "Build",
+                        title: L10n.Settings.build,
                         value: viewModel.buildNumber
                     )
 
@@ -386,7 +386,7 @@ struct SettingsView: View {
                     // Privacy policy
                     SettingsRowButton(
                         icon: "hand.raised.fill",
-                        title: "Privacy Policy",
+                        title: L10n.Settings.privacyPolicy,
                         action: { viewModel.openPrivacyPolicy() }
                     )
 
@@ -395,14 +395,14 @@ struct SettingsView: View {
                     // Open source licenses
                     SettingsRowButton(
                         icon: "doc.text.fill",
-                        title: "Open Source Licenses",
+                        title: L10n.Settings.openSourceLicenses,
                         action: { viewModel.openLicenses() }
                     )
                 }
             }
 
             // Developer info
-            Text("Made with care for your privacy")
+            Text(L10n.Settings.madeWithCare)
                 .font(.footnote)
                 .foregroundColor(.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -447,10 +447,10 @@ struct SettingsView: View {
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Auto-lock Timer")
+            .navigationTitle(L10n.Settings.autoLockTimer)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
+                    Button(L10n.Common.done) {
                         viewModel.showAutoLockOptions = false
                     }
                 }
@@ -498,10 +498,10 @@ struct SettingsView: View {
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Appearance")
+            .navigationTitle(L10n.Settings.appearance)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
+                    Button(L10n.Common.done) {
                         viewModel.showAppearanceOptions = false
                     }
                 }
