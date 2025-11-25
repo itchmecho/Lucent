@@ -67,6 +67,11 @@ final class SettingsViewModel: ObservableObject {
             UserDefaults.standard.set(useGridView, forKey: "useGridView")
         }
     }
+    @Published var showCameraButton: Bool = true {
+        didSet {
+            UserDefaults.standard.set(showCameraButton, forKey: "showCameraButton")
+        }
+    }
 
     // UI State
     @Published var showAlert: Bool = false
@@ -76,6 +81,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var showAutoLockOptions: Bool = false
     @Published var showAppearanceOptions: Bool = false
     @Published var showBackupView: Bool = false
+    @Published var showLicensesView: Bool = false
 
     // MARK: - Private Properties
 
@@ -138,6 +144,7 @@ final class SettingsViewModel: ObservableObject {
         showPhotoCounts = UserDefaults.standard.bool(forKey: "showPhotoCounts")
         showThumbnails = UserDefaults.standard.object(forKey: "showThumbnails") as? Bool ?? true
         useGridView = UserDefaults.standard.bool(forKey: "useGridView")
+        showCameraButton = UserDefaults.standard.object(forKey: "showCameraButton") as? Bool ?? true
 
         // Load storage stats
         loadStorageStats()
@@ -391,12 +398,7 @@ final class SettingsViewModel: ObservableObject {
 
     /// Opens open source licenses
     func openLicenses() {
-        alertTitle = L10n.Settings.openSourceLicenses
-        alertMessage = L10n.Settings.licensesMessage
-        isDestructiveAlert = false
-        showAlert = true
-
-        // TODO: Show actual licenses view
+        showLicensesView = true
     }
 
     // MARK: - Alert Actions

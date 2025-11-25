@@ -454,8 +454,8 @@ struct ZoomablePhotoView: View {
             .scaleEffect(scale)
             .offset(offset)
             .gesture(magnificationGesture)
-            // Only attach drag gesture when zoomed in - otherwise it blocks TabView paging
-            .gesture(scale > 1.0 ? dragGesture : nil)
+            // Only enable drag gesture when zoomed in - otherwise it blocks TabView paging
+            .gesture(dragGesture, including: scale > 1.0 ? .all : .none)
             .gesture(doubleTapGesture)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scale)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: offset)
@@ -467,8 +467,8 @@ struct ZoomablePhotoView: View {
             .scaleEffect(scale)
             .offset(offset)
             .gesture(magnificationGesture)
-            // Only attach drag gesture when zoomed in - otherwise it blocks TabView paging
-            .gesture(scale > 1.0 ? dragGesture : nil)
+            // Only enable drag gesture when zoomed in - otherwise it blocks TabView paging
+            .gesture(dragGesture, including: scale > 1.0 ? .all : .none)
             .gesture(doubleTapGesture)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scale)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: offset)

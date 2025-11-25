@@ -15,8 +15,10 @@ struct PhotoGridView: View {
     @State private var selectedPhoto: EncryptedPhoto?
     @State private var showingPhotoDetail = false
     @State private var showingSlideshow = false
+    @State private var showingImportMenu = false
     @State private var columns = 3
     @AppStorage("showThumbnails") private var showThumbnails = true
+    @AppStorage("showCameraButton") private var showCameraButton = true
 
     // MARK: - Body
 
@@ -44,6 +46,14 @@ struct PhotoGridView: View {
                 toolbarContent
             }
             .searchable(text: $viewModel.searchQuery, prompt: "Search photos")
+            .sheet(isPresented: $showingImportMenu) {
+                ImportMenuView(onImportComplete: {
+                    showingImportMenu = false
+                    Task {
+                        await viewModel.refresh()
+                    }
+                })
+            }
             .sheet(isPresented: $showingPhotoDetail) {
                 if let photo = selectedPhoto {
                     PhotoDetailView(
@@ -71,6 +81,30 @@ struct PhotoGridView: View {
             #endif
             .refreshable {
                 await viewModel.refresh()
+            }
+            .safeAreaInset(edge: .bottom) {
+                if showCameraButton {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+
+                            #if canImport(UIKit)
+                            CameraButton { _ in
+                                Task {
+                                    await viewModel.refresh()
+                                }
+                            }
+                            .frame(width: 60, height: 60)
+                            #endif
+
+                            Spacer()
+                                .frame(width: 16)
+                        }
+                        .padding(.bottom, 16)
+                    }
+                    .frame(maxHeight: .infinity, alignment: .bottomTrailing)
+                }
             }
         }
         .onDisappear {
@@ -149,6 +183,23 @@ struct PhotoGridView: View {
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Menu {
+                // Import and camera section
+                Section {
+                    Button {
+                        showingImportMenu = true
+                    } label: {
+                        Label("Import Photos", systemImage: "plus.circle.fill")
+                    }
+
+                    if !showCameraButton {
+                        Button {
+                            // Camera will be triggered via CameraButton in PhotoGridView
+                        } label: {
+                            Label("Take Photo", systemImage: "camera.fill")
+                        }
+                    }
+                }
+
                 // View options
                 Section("View") {
                     Picker("Columns", selection: $columns) {
@@ -165,25 +216,49 @@ struct PhotoGridView: View {
                     Button {
                         viewModel.sortOrder = .dateAddedNewest
                     } label: {
-                        Label("Date Added (Newest)", systemImage: viewModel.sortOrder == .dateAddedNewest ? "checkmark" : "")
+                        HStack {
+                            Text("Date Added (Newest)")
+                            Spacer()
+                            if viewModel.sortOrder == .dateAddedNewest {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
 
                     Button {
                         viewModel.sortOrder = .dateAddedOldest
                     } label: {
-                        Label("Date Added (Oldest)", systemImage: viewModel.sortOrder == .dateAddedOldest ? "checkmark" : "")
+                        HStack {
+                            Text("Date Added (Oldest)")
+                            Spacer()
+                            if viewModel.sortOrder == .dateAddedOldest {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
 
                     Button {
                         viewModel.sortOrder = .dateTakenNewest
                     } label: {
-                        Label("Date Taken (Newest)", systemImage: viewModel.sortOrder == .dateTakenNewest ? "checkmark" : "")
+                        HStack {
+                            Text("Date Taken (Newest)")
+                            Spacer()
+                            if viewModel.sortOrder == .dateTakenNewest {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
 
                     Button {
                         viewModel.sortOrder = .dateTakenOldest
                     } label: {
-                        Label("Date Taken (Oldest)", systemImage: viewModel.sortOrder == .dateTakenOldest ? "checkmark" : "")
+                        HStack {
+                            Text("Date Taken (Oldest)")
+                            Spacer()
+                            if viewModel.sortOrder == .dateTakenOldest {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
                 }
 
@@ -192,13 +267,19 @@ struct PhotoGridView: View {
                     Button {
                         viewModel.selectedFilter = .all
                     } label: {
-                        Label("All Photos", systemImage: viewModel.selectedFilter == .all ? "checkmark" : "")
+                        HStack {
+                            Text("All Photos")
+                            Spacer()
+                            if viewModel.selectedFilter == .all {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
 
                     Button {
                         viewModel.selectedFilter = .favorites
                     } label: {
-                        Label("Favorites", systemImage: viewModel.selectedFilter == .favorites ? "checkmark" : "star.fill")
+                        Label("Favorites", systemImage: "star.fill")
                     }
                 }
 

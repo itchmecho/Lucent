@@ -306,6 +306,16 @@ struct SettingsView: View {
                         subtitle: "Use grid layout with search & filters",
                         isOn: $viewModel.useGridView
                     )
+
+                    Divider().padding(.leading, DesignTokens.Spacing.xxl + DesignTokens.Spacing.lg)
+
+                    // Camera button toggle
+                    SettingsRowToggle(
+                        icon: "camera.fill",
+                        title: "Camera Button",
+                        subtitle: "Show quick access camera button",
+                        isOn: $viewModel.showCameraButton
+                    )
                 }
             }
         }
@@ -354,6 +364,9 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $viewModel.showBackupView) {
             BackupView()
+        }
+        .sheet(isPresented: $viewModel.showLicensesView) {
+            LicensesView()
         }
     }
 

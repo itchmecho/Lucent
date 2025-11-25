@@ -149,7 +149,13 @@ struct SlideshowView: View {
                             Button {
                                 transitionEffect = effect
                             } label: {
-                                Label(effect.rawValue, systemImage: transitionEffect == effect ? "checkmark" : "")
+                                HStack {
+                                    Text(effect.rawValue)
+                                    Spacer()
+                                    if transitionEffect == effect {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
                             }
                         }
                     }
@@ -160,21 +166,39 @@ struct SlideshowView: View {
                             transitionInterval = 2.0
                             restartSlideTimer()
                         } label: {
-                            Label("Fast (2s)", systemImage: transitionInterval == 2.0 ? "checkmark" : "")
+                            HStack {
+                                Text("Fast (2s)")
+                                Spacer()
+                                if transitionInterval == 2.0 {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
                         }
 
                         Button {
                             transitionInterval = 3.0
                             restartSlideTimer()
                         } label: {
-                            Label("Normal (3s)", systemImage: transitionInterval == 3.0 ? "checkmark" : "")
+                            HStack {
+                                Text("Normal (3s)")
+                                Spacer()
+                                if transitionInterval == 3.0 {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
                         }
 
                         Button {
                             transitionInterval = 5.0
                             restartSlideTimer()
                         } label: {
-                            Label("Slow (5s)", systemImage: transitionInterval == 5.0 ? "checkmark" : "")
+                            HStack {
+                                Text("Slow (5s)")
+                                Spacer()
+                                if transitionInterval == 5.0 {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
                         }
                     }
                 } label: {
